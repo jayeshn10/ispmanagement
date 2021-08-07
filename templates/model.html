@@ -1,0 +1,41 @@
+<div id="myEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+    <div role="document" class="modal-dialog modal-dialog-pkghis">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="exampleModalLabel" class="modal-title">Package History</h4>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Connection ID</th>
+                                <th>Package Name</th>
+                                <th>Bandwidth</th>
+                                <th>Validity</th>
+                                <th>Package Activation Date</th>
+                                <th>Package Expiry Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {%for objpkgh in objpkghs %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{objpkgh.conn_code}}</td>
+                                <td>{{objpkgh.pkg_name}}</td>
+                                <td>{{objpkgh.pkg_bandwidth}}Mbps</td>
+                                <td>{{objpkgh.pkg_noofdays}}days</td>
+                                <td>{{objpkgh.pkg_startdate}}</td>
+                                <td>{{objpkgh.pkg_enddate}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

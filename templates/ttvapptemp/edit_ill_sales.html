@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if EditPer%}Edit{% else %}View{% endif %} TTV ILL Connection Sales Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">ThreesaThroughVendorILLConnections</a></li>
+        <li class="breadcrumb-item">TTV ILL Connection Sales Details</li>
+        <li class="breadcrumb-item active">{%if EditPer%}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if EditPer%}Edit{% else %}View{% endif %} TTV ILL Connection Sales Details</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if EditPer %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            {{form.errors}}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Location Pin</label>
+                                <div class="col-sm-9">
+                                    {{form.location_pin}}
+                                    {% if form.location_pin.errors %}
+                                    <small class="help-block-none">{{form.location_pin.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order No</label>
+                                <div class="col-sm-9">
+                                    {{form.purchase_order_no}}
+                                    {% if form.purchase_order_no.errors %}
+                                    <small class="help-block-none">{{form.purchase_order_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order Image</label>
+                                <div class="col-sm-9">
+                                    {{form.po_img.currently}}
+                                    {{form.po_img}}
+                                    {% if form.po_img.errors %}
+                                    <small class="help-block-none">{{form.po_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">KYC Details</label>
+                                <div class="col-sm-9">
+                                    {{form.kyc_details.currently}}
+                                    {{form.kyc_details}}
+                                    {% if form.kyc_details.errors %}
+                                    <small class="help-block-none">{{form.kyc_details.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">GST No.</label>
+                                <div class="col-sm-9">
+                                    {{form.gst_no}}
+                                    {% if form.gst_no.errors %}
+                                    <small class="help-block-none">{{form.gst_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_name}}
+                                    {% if form.cust_cpn_name.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_num}}
+                                    {% if form.cust_cpn_num.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_num.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC Engineer</label>
+                                <div class="col-sm-9">
+                                    {% if not etlsobj.assign_status%}
+                                    {{form.assign_noc}}
+                                    {% if form.assign_noc.errors %}
+                                    <small class="help-block-none">{{form.assign_noc.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{etlsobj.assign_noc}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlsobj.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.ill_sign_id}} - {{etlsobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {% else%}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Location Pin</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.location_pin}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order No</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.purchase_order_no}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order Image</label>
+                                <div class="col-sm-9">
+                                    <a href="{{etlsobj.po_img.url}}" target="_blank">View PO</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">KYC Details</label>
+                                <div class="col-sm-9">
+                                    <a href="{{etlsobj.kyc_details.url}}" target="_blank">KYC Details</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">GST No.</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.gst_no}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.cust_cpn_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.cust_cpn_num}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC Engineer</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.assign_noc}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if etlsobj.assign_status %}
+                                    Assigned
+                                    {% else %}
+                                    not Assigned
+                                    {% endif %}</td>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlsobj.ill_sign_id}} - {{etlsobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

@@ -1,0 +1,424 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Shift ILL Connection</h3>
+            </div>
+            <div class="card-body">
+                {% if objpossible %}
+                {% if ttottv %}
+                <p><b>Click Continue To shift Connection From Threesa TO Threesa Through Vender</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Select Vendor</label>
+                        <div class="col-sm-9">
+                            <select id="ill_vendor_code" name="ill_vendor_code" class="form-control">
+                                {% if ill_vendor_codes %}
+                                <option value>--------</option>
+                                {% for ill_vendor_code in ill_vendor_codes %}
+                                <option value="{{ill_vendor_code.id}}">{{ill_vendor_code.v_code}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%elif ttovtt %}
+                <p><b>Click Continue To shift Connection From Threesa TO Vender Through Threesa</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row" >
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Select Vendor</label>
+                        <div class="col-sm-9">
+                            <select id="ill_vendor_code" name="ill_vendor_code" class="form-control">
+                                {% if ill_vendor_codes %}
+                                <option value>--------</option>
+                                {% for ill_vendor_code in ill_vendor_codes %}
+                                <option value="{{ill_vendor_code.id}}">{{ill_vendor_code.v_code}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%elif ttvtot %}
+                <p><b>Please Fill Details and Click Continue To shift Connection From Threesa Through vendor TO Threesa</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label"><h3>Enter Fiber Details :</h3></label>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                        <div class="col-sm-9">
+                            <select id="assign_fiber" name="assign_fiber" class="form-control">
+                                {% if fiber_engg_all %}
+                                {% for fiber_engg in fiber_engg_all %}
+                                <option value="{{fiber_engg.id}}">{{fiber_engg.username}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Media Image</label>
+                        <div class="col-sm-9">
+                            <input class="form-control-file" type="file" name="media_img">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch Image</label>
+                        <div class="col-sm-9">
+                            <input class="form-control-file" type="file" name="switch_img">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Port</label>
+                        <div class="col-sm-9">
+                            <select id="port_media_type" name="port_media_type" class="form-control">
+                                <option value="1">1000</option>
+                                <option value="2">100</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Fiber Core</label>
+                        <div class="col-sm-9">
+                            <select id="fiber_core" name="fiber_core" class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">POP Name</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="pop_name">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label"><h3>Enter Noc Details :</h3></label>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch IP</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="ill_switch_ip" >
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch Port No</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="ill_switch_port_no" >
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%elif ttvtovtt %}
+                <p><b>Please Fill Details and Click Continue To shift Connection From Threesa Through vendor TO Vendor Through Threesa</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Select Vendor</label>
+                        <div class="col-sm-9">
+                            <select id="ill_vendor_code" name="ill_vendor_code" class="form-control">
+                                {% if ill_vendor_codes %}
+                                <option value>--------</option>
+                                {% for ill_vendor_code in ill_vendor_codes %}
+                                <option value="{{ill_vendor_code.id}}">{{ill_vendor_code.v_code}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label"><h3>Enter Fiber Details :</h3></label>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                        <div class="col-sm-9">
+                            <select id="assign_fiber" name="assign_fiber" class="form-control">
+                                {% if fiber_engg_all %}
+                                {% for fiber_engg in fiber_engg_all %}
+                                <option value="{{fiber_engg.id}}">{{fiber_engg.username}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Media Image</label>
+                        <div class="col-sm-9">
+                            <input class="form-control-file" type="file" name="media_img">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch Image</label>
+                        <div class="col-sm-9">
+                            <input class="form-control-file" type="file" name="switch_img">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Port</label>
+                        <div class="col-sm-9">
+                            <select id="port_media_type" name="port_media_type" class="form-control">
+                                <option value="1">1000</option>
+                                <option value="2">100</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Fiber Core</label>
+                        <div class="col-sm-9">
+                            <select id="fiber_core" name="fiber_core" class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">POP Name</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="pop_name">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label"><h3>Enter Noc Details :</h3></label>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch IP</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="ill_switch_ip" >
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Switch Port No</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="ill_switch_port_no" >
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%elif vtttot %}
+                <p><b>Click Continue To shift Connection From Vender Through Threesa TO Threesa</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%elif vtttottv %}
+                <p><b>Click Continue To shift Connection From Vendor Through Threesa TO Threesa Through Vendor</b></p>
+                <form class="form-horizontal" id='shiftverifyform'>
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id_2" value="{{connid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                <option value="{{conntype}}">{%if conntype == '1'%}Threesa{%elif conntype == '2' %}Threesa Through Vendor {%elif conntype == '3' %} Vendor Through Threesa {%endif%} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Select Vendor</label>
+                        <div class="col-sm-9">
+                            <select id="ill_vendor_code" name="ill_vendor_code" class="form-control">
+                                {% if ill_vendor_codes %}
+                                <option value>--------</option>
+                                {% for ill_vendor_code in ill_vendor_codes %}
+                                <option value="{{ill_vendor_code.id}}">{{ill_vendor_code.v_code}}</option>
+                                {%endfor%}
+                                {%endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <div id="postcontinue">
+                                <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                                <input type="submit" value="Continue" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {%endif%}
+                <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#shiftverifyform').submit(function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            data: $(this).serialize(), // get the form data
+                            type: 'POST', // GET or POST
+                            url: "{% url 'shiftconnverify' %}", // the file to call
+                            success: function(data) {
+                                $('#conntype').html(data);
+                            },
+                            error: function(response) {
+                                // alert the error if any error occured
+                                alert(response["responseJSON"]["error"]);
+                            }
+
+                        });
+                        $('#postcontinue').html('<p>Please Wait !</p>');
+
+                    });
+                });
+                </script>
+                {%else%}
+                <p>Can not shift this connection</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>

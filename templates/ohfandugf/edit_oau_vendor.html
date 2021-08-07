@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if editper %}Edit{% else%} view{%endif%} OHF And UGF Vendor</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'ohfandugfvendor'%}">OHF And UGF Vendor</a></li>
+        <li class="breadcrumb-item active">{%if editper %}Edit{% else%} view{%endif%}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if editper %}Edit{% else%} view{%endif%} OHF And UGF Vendor</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if editper %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            {{form.errors}}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Code</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Name</label>
+                                <div class="col-sm-9">
+                                    {{form.v_name}}
+                                    {% if form.v_name.errors %}
+                                    <small class="help-block-none">{{form.v_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Office Address</label>
+                                <div class="col-sm-9">
+                                    {{form.v_address}}
+                                    {% if form.v_address.errors %}
+                                    <small class="help-block-none">{{form.v_address.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{form.v_contact_person_name}}
+                                    {% if form.v_contact_person_name.errors %}
+                                    <small class="help-block-none">{{form.v_contact_person_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Contact Person No</label>
+                                <div class="col-sm-9">
+                                    {{form.v_contact_person_no}}
+                                    {% if form.v_contact_person_no.errors %}
+                                    <small class="help-block-none">{{form.v_contact_person_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{% url 'ohfandugfvendor' %}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else %}
+                        <div class="form-horizontal">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Code</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Name</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Office Address</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_address}}
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_contact_person_name}}
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Contact Person No</label>
+                                <div class="col-sm-9">
+                                    {{oauvendorobj.v_contact_person_no}}
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{% url 'ohfandugfvendor' %}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

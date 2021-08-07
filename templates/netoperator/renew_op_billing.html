@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% load static %}
+{% block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#paym1").hide();
+    $("#paym2").hide();
+    $("#paym3").hide();
+
+    function checkpmode() {
+        if ($('#id_payment_method option:selected').val() == '1') {
+            $('#paymentmode').html($('#paym1').html());
+
+        } else if ($('#id_payment_method option:selected').val() == '2') {
+            $('#paymentmode').html($('#paym2').html());
+
+        } else if ($('#id_payment_method option:selected').val() == '3') {
+
+            $('#paymentmode').html($('#paym3').html());
+        } else {
+            $('#paymentmode').html('');
+
+        }
+    }
+    checkpmode();
+
+    function validitycal(sdat, edat) {
+        var d1 = Date.parse(sdat);
+        var d2 = Date.parse(edat);
+        if (d1 < d2) {
+            var date1 = new Date(edat);
+            var date2 = new Date(sdat);
+            var diffTime = Math.abs(date2 - date1);
+            var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            $("#id_payment_validity").val(diffDays);
+        } else {
+
+            $("#id_payment_validity").val('0');
+        }
+
+    }
+    validitycal($('#id_payment_start_date').val(), $('#id_payment_end_date').val());
+    $("#id_payment_method").on("change", function() {
+        checkpmode();
+    });
+
+    $('#id_payment_start_date').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 1990,
+        maxYear: 2121,
+    }, function(start, end, label) {
+        $(this).val(start);
+        endd = $('#id_payment_end_date').val();
+        validitycal(start, endd)
+
+    });
+
+    $('#id_payment_end_date').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 1990,
+        maxYear: 2121,
+    }, function(start, end, label) {
+        $(this).val(start);
+        var startd = $("#id_payment_start_date").val();
+        validitycal(startd, start);
+    });
+
+
+});
+</script>
+{% endblock %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Renew Operator Billing Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'netoperators'%}">Operator Details</a></li>
+        <li class="breadcrumb-item">Operator Billing Details</li>
+        <li class="breadcrumb-item active">Renew</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Renew Operator Billing Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Id</label>
+                                <div class="col-sm-9">
+                                    {{retlbobj.operator_id}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{retlbobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Start Date</label>
+                                <div class="col-sm-9">
+                                    {{form.payment_start_date}}
+                                    {% if form.payment_start_date.errors %}
+                                    <small class="help-block-none">{{form.payment_start_date.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment End Date</label>
+                                <div class="col-sm-9">
+                                    {{form.payment_end_date}}
+                                    {% if form.payment_end_date.errors %}
+                                    <small class="help-block-none">{{form.payment_end_date.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Validity (In Days)</label>
+                                <div class="col-sm-9">
+                                    {{form.payment_validity}}
+                                    {% if form.payment_validity.errors %}
+                                    <small class="help-block-none">{{form.payment_validity.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Number of TopUp</label>
+                                <div class="col-sm-9">
+                                    {{form.no_topup}}
+                                    {% if form.no_topup.errors %}
+                                    <small class="help-block-none">{{form.no_topup.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Status</label>
+                                <div class="col-sm-9">
+                                    {{form.payment_status}}
+                                    {% if form.payment_status.errors %}
+                                    <small class="help-block-none">{{form.payment_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Amount(₹)</label>
+                                <div class="col-sm-9">
+                                    {{form.amount}}
+                                    {% if form.amount.errors %}
+                                    <small class="help-block-none">{{form.amount.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Method</label>
+                                <div class="col-sm-9">
+                                    {{form.payment_method}}
+                                    {% if form.payment_method.errors %}
+                                    <small class="help-block-none">{{form.payment_method.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div id="paymentmode">
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Invoice</label>
+                                <div class="col-sm-9">
+                                    {{form.op_payment_receipt}}
+                                    {% if form.op_payment_receipt.errors %}
+                                    <small class="help-block-none">{{form.op_payment_receipt.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="paym3">
+            <div class="line">
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Cheque Number
+                </label>
+                <div class="col-sm-9"> {{ form.transaction_id }} {% if form.transaction_id.errors %}
+                    <small class="help-block-none">{{form.transaction_id.errors}}</small> {% endif %}
+                </div>
+            </div>
+            <div class="line"> </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Cheque
+                </label>
+                <div class="col-sm-9"> {{ form.transaction_receipt }} {% if form.transaction_receipt.errors %}
+                    <small class="help-block-none">{{form.transaction_receipt.errors}}</small> {% endif %} </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id='paym2'>
+            <div class="line "></div>
+            <div class="form-group row ">
+                <label class="col-sm-3 form-control-label"> NetBanking Type </label>
+                <div class="col-sm-9">{{form.netbanking_type}} {% if form.netbanking_type.errors %}
+                    <small class="help-block-none">{{form.netbanking_type.errors}}</small> {% endif %}
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Transaction ID
+                </label>
+                <div class="col-sm-9">{{ form.transaction_id }} {% if form.transaction_id.errors %}
+                    <small class="help-block-none">{{form.transaction_id.errors}}</small> {% endif %} </div>
+            </div>
+            <div class="line"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Transaction Receipt
+                </label>
+                <div class="col-sm-9">{{ form.transaction_receipt }} {% if form.transaction_receipt.errors %}
+                    <small class="help-block-none">{{form.transaction_receipt.errors}}</small> {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id='paym1'>
+            <div class="line"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Receipt Number
+                </label>
+                <div class="col-sm-9">{{ form.transaction_id }} {% if form.transaction_id.errors %}
+                    <small class="help-block-none">{{form.transaction_id.errors}}</small> {% endif %} </div>
+            </div>
+            <div class="line"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label">
+                    Receipt
+                </label>
+                <div class="col-sm-9">{{ form.transaction_receipt }} {% if form.transaction_receipt.errors %}
+                    <small class="help-block-none">{{form.transaction_receipt.errors}}</small> {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

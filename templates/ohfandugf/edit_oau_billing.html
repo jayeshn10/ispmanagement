@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if editper %}Edit{% else%} view{%endif%} OHF & UGF Link</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">OHF & UGF</a></li>
+        <li class="breadcrumb-item">Billing Details</li>
+        <li class="breadcrumb-item active">{% if EditPer %}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if editper %}Edit{% else%} view{%endif%} OHF & UGF Billing Details</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if editper %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Code</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Start Date</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_start_date}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link End Date</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_end_date}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL Validity (In Days)</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_validity}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Agreement File</label>
+                                <div class="col-sm-9">
+                                    {{form.agreement_file}}
+                                    {% if form.agreement_file.errors %}
+                                    <small class="help-block-none">{{form.agreement_file.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Status</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.get_payment_status_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Amount(₹)</label>
+                                <div class="col-sm-9">
+                                    {{form.amount}}
+                                    {% if form.amount.errors %}
+                                    <small class="help-block-none">{{form.amount.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Method</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.get_payment_method_display}}
+                                </div>
+                            </div>
+                            
+                            {%if objbilling.payment_method == '2'%}
+                            <div class="line "></div>
+                            <div class="form-group row ">
+                                <label class="col-sm-3 form-control-label"> NetBanking Type </label>
+                                <div class="col-sm-9">{{objbilling.get_netbanking_type_display}}
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    {%if objbilling.payment_method == '1' %}
+                                    Receipt Number
+                                    {%elif objbilling.payment_method == '2' %}
+                                    Transaction ID
+                                    {%elif objbilling.payment_method == '3' %}
+                                    Cheque Number
+                                    {%endif%}
+                                </label>
+                                <div class="col-sm-9">{{ form.transaction_id }}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    {%if objbilling.payment_method == '1' %}
+                                    Receipt
+                                    {%elif objbilling.payment_method == '2' %}
+                                    Transection Receipt
+                                    {%elif objbilling.payment_method == '3' %}
+                                    Cheque
+                                    {%endif%}
+                                </label>
+                                <div class="col-sm-9">{{ form.transaction_receipt }}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Invoice</label>
+                                <div class="col-sm-9">
+                                    {{form.billing_img}}
+                                    {% if form.billing_img.errors %}
+                                    <small class="help-block-none">{{form.billing_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.sign_id}} - {{objbilling.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Code</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Start Date</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_start_date}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link End Date</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_end_date}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL Validity (In Days)</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.link_validity}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Agreement File</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.agreement_file}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Status</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.get_payment_status_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Amount(₹)</label>
+                                <div class="col-sm-9">
+                                    ₹{{objbilling.amount}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Payment Method</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.get_payment_method_display}}
+                                </div>
+                            </div>
+                            
+                            {%if objbilling.payment_method == '2'%}
+                            <div class="line "></div>
+                            <div class="form-group row ">
+                                <label class="col-sm-3 form-control-label"> NetBanking Type </label>
+                                <div class="col-sm-9">{{objbilling.get_netbanking_type_display}}
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    {%if objbilling.payment_method == '1' %}
+                                    Receipt Number
+                                    {%elif objbilling.payment_method == '2' %}
+                                    Transaction ID
+                                    {%elif objbilling.payment_method == '3' %}
+                                    Cheque Number
+                                    {%endif%}
+                                </label>
+                                <div class="col-sm-9">{{ objbilling.transaction_id }}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    {%if objbilling.payment_method == '1' %}
+                                    Receipt
+                                    {%elif objbilling.payment_method == '2' %}
+                                    Transection Receipt
+                                    {%elif objbilling.payment_method == '3' %}
+                                    Cheque
+                                    {%endif%}
+                                </label>
+                                <div class="col-sm-9">{{ objbilling.transaction_receipt }}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Invoice</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.billing_img}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objbilling.sign_id}} - {{objbilling.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

@@ -1,0 +1,79 @@
+{%if objfound%}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Shift ILL Connection</h3>
+            </div>
+            <div class="card-body">
+                <form class="form-horizontal" id="shiftpostform">
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Connection Id</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="conn_id" value="{{tlcobj.ill_custid}}" required readonly>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Shifting Connection Type</label>
+                        <div class="col-sm-9">
+                            <select id="ill_conn_type" name="ill_conn_type" class="form-control">
+                                {% if not tlcobj.ill_conn_type == '1'%}
+                                <option value="1">Threesa</option>
+                                {%endif%}
+                                {% if not tlcobj.ill_conn_type == '2'%}
+                                <option value="2">Threesa Through Vendor</option>
+                                {%endif%}
+                                {% if not tlcobj.ill_conn_type == '3'%}
+                                <option value="3">Vendor Through Threesa</option>
+                                {%endif%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 offset-sm-3">
+                            <a href="{%url 'shiftconnection'%}" class="btn btn-secondary">Cancel</a>
+                            <button name="shiftpost" id="shiftpost" class="btn btn-primary">save</button>
+                        </div>
+                    </div>
+                </form>
+                <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#shiftpostform').submit(function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            data: $(this).serialize(), // get the form data
+                            type: 'POST', // GET or POST
+                            url: "{% url 'shiftconnection' %}", // the file to call
+                            success: function(data) {
+                                $('#conntype').html(data);
+                            },
+                            error: function(response) {
+                                // alert the error if any error occured
+                                alert(response["responseJSON"]["error"]);
+                            }
+
+                        });
+                    });
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{%else%}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Shift ILL Connection</h3>
+            </div>
+            <div class="card-body">
+                <p>ID NOT Found</p>
+            </div>
+        </div>
+    </div>
+</div>
+{%endif%}

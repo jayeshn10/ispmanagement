@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% load static%}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    //for billing history modal
+    var modalDiv = $("#modal-div");
+    $(".open-modal").on("click", function() {
+        $.ajax({
+            type: 'GET',
+            url: $(this).attr("data-url"),
+            success: function(data) {
+                modalDiv.html(data);
+                $("#mybilling").modal();
+            }
+        });
+    });
+
+    //for lead generation
+    $('#lgpicker').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            format: 'YYYY-MM-DD',
+            cancelLabel: 'Clear',
+        },
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right'
+    }, function(start, end) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+
+    });
+    $('#lgpicker').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        $('#lgstrd').val(picker.startDate.format('YYYY-MM-DD'));
+        $('#lgendd').val(picker.endDate.format('YYYY-MM-DD'));
+
+    });
+    $('#lgpicker').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $('#lgstrd').val('');
+        $('#lgendd').val('');
+
+    });
+
+    //for Package Activation
+    $('#capicker').daterangepicker({
+        autoUpdateInput: false,
+
+
+        locale: {
+            cancelLabel: 'Clear'
+        },
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right'
+    }, function(start, end) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        $('#castrd').val(start.format('YYYY-MM-DD'));
+        $('#caendd').val(end.format('YYYY-MM-DD'));
+    });
+    $('#capicker').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        $('#castrd').val(picker.startDate.format('YYYY-MM-DD'));
+        $('#caendd').val(picker.endDate.format('YYYY-MM-DD'));
+    });
+    $('#capicker').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $('#castrd').val('');
+        $('#caendd').val('');
+    });
+
+    //for Package Activation
+    $('#cepicker').daterangepicker({
+        autoUpdateInput: false,
+
+
+        locale: {
+            cancelLabel: 'Clear'
+        },
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right'
+    }, function(start, end) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        $('#cestrd').val(start.format('YYYY-MM-DD'));
+        $('#ceendd').val(end.format('YYYY-MM-DD'));
+    });
+    $('#cepicker').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        $('#cestrd').val(picker.startDate.format('YYYY-MM-DD'));
+        $('#ceendd').val(picker.endDate.format('YYYY-MM-DD'));
+    });
+    $('#cepicker').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $('#cestrd').val('');
+        $('#ceendd').val('');
+    });
+
+
+    $('input[type="checkbox"]').click(function() {
+        var id2 = $(this).attr("id");
+        valhtml = $("label[for=" + id2 + "]").html();
+
+        if ($(this).is(":checked")) {
+            $("#termhtml" + id2 + "").html(valhtml);
+        } else {
+            $("#termhtml" + id2 + "").html("");
+        }
+    });
+
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Vendor Through Threesa IIL Connections Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">VendorThroughThreesaILLConnections</li>
+    </ul>
+</div>
+<div class="leftrightscroll">
+    <button id="left-button">&#8249;</button>
+    <button id="right-button">&#8250;</button>
+</div>
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="icon icon-search"></div>
+                            <input type="text" class="form-control" placeholder="search here" name="searchqry">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="num_page" value="{{rowcount}}">
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Go!" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="h4">Vendor Through Threesa IIL Details</h3>
+                                </div>
+                                {% if request.user.is_staff or request.user|has_group:"salesperson" %}
+                                <div class="col">
+                                    <a type="button" id="closeCard3" class="btn btn-primary" href="{% url 'addvttillcon' %}" style="float: right;">ADD</a>
+                                </div>
+                                {%endif%}
+                            </div>
+                            <div class="row">
+                                <form class="form-inline" method="GET">
+                                    <div class="form-group form-gr-margin">{{connfilter.form.conn_code}}</div>
+                                    <div class="form-group form-gr-margin">
+                                        {{connfilter.form.conn_code__ill_vendor_code}}
+                                    </div>
+                                    <div class="form-group form-gr-margin">
+                                        <input type="text" id="lgpicker" name="lgpicker" {%if connfilter.form.lgstrd.value and connfilter.form.lgendd.value%}value="{{connfilter.form.lgstrd.value}} {{connfilter.form.lgendd.value}}" {%else%}{%endif%}class="mr-2 form-control" placeholder="Lead Generation" autocomplete='off' />
+                                        <!--{{connfilter.form.lgpicker2}}--->
+                                        {{connfilter.form.lgstrd}}
+                                        {{connfilter.form.lgendd}}
+                                        <!---<input type="hidden" name="lgstrd" id="lgstrd">
+                                        <input type="hidden" name="lgendd" id="lgendd">--->
+                                    </div>
+                                    <div class="form-group form-gr-margin">
+                                        <input type="text" id="capicker" name="capicker" {%if connfilter.form.caendd.value and connfilter.form.caendd.value%}value="{{connfilter.form.castrd.value}} {{connfilter.form.caendd.value}}" {%else%}{%endif%} class="mr-2 form-control" placeholder="Activation Date" autocomplete='off' />
+                                        {{connfilter.form.castrd}}
+                                        {{connfilter.form.caendd}}
+                                        <!---
+                                        <input type="hidden" name="pastrd" id="pastrd">
+                                        <input type="hidden" name="paendd" id="paendd">--->
+                                    </div>
+                                    <div class="form-group form-gr-margin">
+                                        <input type="text" id="cepicker" name="cepicker" {%if connfilter.form.cestrd.value and connfilter.form.ceendd.value%}value="{{connfilter.form.cestrd.value}} {{connfilter.form.ceendd.value}}" {%else%}{%endif%} class="mr-2 form-control" placeholder="Package Expiry" autocomplete='off' />
+                                        {{connfilter.form.cestrd}}
+                                        {{connfilter.form.ceendd}}
+                                        <!---
+                                        <input type="hidden" name="pestrd" id="pestrd">
+                                        <input type="hidden" name="peendd" id="peendd">--->
+                                    </div>
+                                    <div class="form-group form-gr-margin">
+                                        <!---<select name="link_status" class="mr-2 form-control">
+                                            <option>Link Status</option>
+                                            {% for lid, lname in connfilter.form.fields.link_status.choices %}
+                                            <option value="{{ lid }}" {% if connfilter.form.fields.link_status.value == lid %} selected{% endif %}>{{ lname }}</option>
+                                            {% endfor %}
+                                        </select>--->{{connfilter.form.link_status}}</div>
+                                    <div class="form-group form-gr-margin">
+                                        {{connfilter.form.pkg_name}} </div>
+                                    <input type="hidden" name="page" value="1">
+                                    <input type="hidden" name="num_page" value="{{rowcount}}">
+                                    <div class="form-group form-gr-margin"><input type="submit" class="btn btn-primary" value="Filter"></div>
+                                    <div class="form-group form-gr-margin"><a href="?" class="btn btn-primary">Clear</a></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                {% if objfeasibles.has_other_pages %}
+                                <div class="pagination">
+                                    {% if objfeasibles.has_previous %}
+                                    <a href="{% relative_url objfeasibles.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in objfeasibles.paginator.page_range %}
+                                    {% if objfeasibles.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if objfeasibles.number|add:"-1" == i or objfeasibles.number|add:"-2" == i or objfeasibles.number|add:1 == i or objfeasibles.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if objfeasibles.has_next %}
+                                    <a href="{% relative_url objfeasibles.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4 pagination-itemsperp">
+                                <form name="myFormItemsPerPage" method="get">
+                                    <label><span class="sipe">Show</span><span class="sipe"><select id="num_page" name="num_page" class="form-control num_page">
+                                                {% for x, y in itemperform.fields.num_page.choices %}
+                                                <option value="{{ x }}" {% if rowcount == x %} selected{% endif %}>{{ y }}</option>
+                                                {% endfor %}
+                                            </select></span><span class="sipe">entries</span></label>
+                                    {% if itemperform.num_page.errors %}
+                                    <small class="help-block-none">{{itemperform.num_page.errors}}</small>
+                                    {% endif%}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" value="" class="checkbox-template" id="alltercb" name="alltercb" /></th>
+                                        <th>Sr.No.</th>
+                                        <th>Connection ID</th>
+                                        <th>ILL Vendor</th>
+                                        <th>Lead Generation Date</th>
+                                        <th>Activation Date</th>
+                                        <th>Expiry Date</th>
+                                        <th>Customer Name</th>
+                                        <th>Customer Address</th>
+                                        <th>Sales details</th>
+                                        <th>Fiber details</th>
+                                        <th>NOC details</th>
+                                        <th>Field Engineer details</th>
+                                        <th>Billing details</th>
+                                        {% if request.user.is_staff or request.user|has_group:"billingteam"%}
+                                        <th>Renew Billing</th>
+                                        {%endif%}
+                                        <th>status</th>
+                                        <th>Billing History</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for objfeasible in objfeasibles %}
+                                    <tr {%if not objfeasible.active_status %} class="deactive-link dahov" {%else%}{%if objfeasible.billing_code%} {% connectionpurplemaker objfeasible.billing_code.conn_end_date as myresult %}{%if myresult %}style='color:#9932CC;' {%endif%}{%endif%}{%endif%}>
+                                        <td><input id="tercb{{objfeasible.id}}" name="terpcb[]" type="checkbox" value="{{objfeasible.id}}" class="checkbox-template" form="terminatepkg_form">
+                                            <label style="display:none;" for="tercb{{objfeasible.id}}"> {{objfeasible.conn_code.ill_custid}}</label></td>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td><a href="{% url 'editillconn' objfeasible.conn_code.id %}">{{objfeasible.conn_code}}</a></td>
+                                        <td>{{objfeasible.conn_code.ill_vendor_code.v_code}}</td>
+                                        <td>{{objfeasible.conn_code.ill_gendate}}</td>
+                                        <td>{%if objfeasible.billing_code %} {{objfeasible.billing_code.conn_start_date}}
+                                            {%else%}Pending{%endif%}</td>
+                                        <td>{%if objfeasible.billing_code %}{{objfeasible.billing_code.conn_end_date}}{%else%}Pending{%endif%}</td>
+                                        <td>{{objfeasible.conn_code.ill_cust_name}}</td>
+                                        <td>{{objfeasible.conn_code.ill_cust_address}}</td>
+                                        <td>{%if objfeasible.sale_code %}<a href="{% url 'editvttillsales' objfeasible.sale_code.id %}">Sales Details</a>{%else%}Pending{%endif%}</td>
+                                        <td>{%if objfeasible.fiber_code %}<a href="{% url 'editvttillfiber' objfeasible.fiber_code.id %}">Fiber Details</a>{%else%}Pending{%endif%}</td>
+                                        <td>{%if objfeasible.noc_code %}<a href="{% url 'editvttillnoc' objfeasible.noc_code.id %}">NOC Details</a>{%else%}Pending{%endif%}</td>
+                                        <td>{%if objfeasible.fe_code %}<a href="{% url 'editvttillfieldengg' objfeasible.fe_code.id %}">FE Details</a>{%else%}Pending{%endif%}</td>
+                                        <td>{%if objfeasible.billing_code %}<a href="{% url 'editvttillbilling' objfeasible.billing_code.id %}">Billing Details</a>{%else%}Pending{%endif%}</td>
+                                        {% if request.user.is_staff or request.user|has_group:"billingteam"%}
+                                        <td>
+                                            {%if objfeasible.billing_code %}
+                                            {% if not objfeasible.active_status%}
+                                            <a href="{% url 'renewvttillbilling' objfeasible.billing_code.id %}" class="btn btn-primary">Renew</a>
+                                            {% else %}
+                                            NA
+                                            {% endif %}
+                                            {% else %}
+                                            NA
+                                            {% endif %}
+                                        </td>
+                                        {%endif%}
+                                        <td>{{objfeasible.get_active_status_display}}</td>
+                                        <td>
+                                            {%if objfeasible.conn_code %}
+                                            <a class="btn btn-primary open-modal" data-url="{% url 'showbillinghistory' connid=objfeasible.conn_code.ill_custid %}" style="color:#fff;">Billing&nbspHistory</a>
+                                            <div id="modal-div"></div>
+                                            {%endif%}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-8">
+                                {% if objfeasibles.has_other_pages %}
+                                <div class="pagination">
+                                    {% if objfeasibles.has_previous %}
+                                    <a href="{% relative_url objfeasibles.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in objfeasibles.paginator.page_range %}
+                                    {% if objfeasibles.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if objfeasibles.number|add:"-1" == i or objfeasibles.number|add:"-2" == i or objfeasibles.number|add:1 == i or objfeasibles.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if objfeasibles.has_next %}
+                                    <a href="{% relative_url objfeasibles.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4">
+                                <form method="POST" style="float: right;">
+                                    {%csrf_token%}
+                                    <input type="hidden" name="exportexcel" value="exportexcel">
+                                    <input type="submit" class="btn btn-secondary" value="Export Excel">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent%}

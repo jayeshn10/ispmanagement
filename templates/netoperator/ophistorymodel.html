@@ -1,0 +1,64 @@
+<div id="mybilling" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+    <div role="document" class="modal-dialog modal-dialog-pkghis">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="exampleModalLabel" class="modal-title">Billing History</h4>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Operator ID</th>
+                                <th>Assign Date And Time</th>
+                                <th>Payment Start Date</th>
+                                <th>Payment End Date</th>
+                                <th>Validity</th>
+                                <th>No of TopUp</th>
+                                <th>Payment Status</th>
+                                <th>Amount(₹)</th>
+                                <th>Payment Method</th>
+                                <th>Netbanking Type</th>
+                                <th>Transaction Id</th>
+                                <th>Transaction Receipt</th>
+                                <th>Invoice</th>
+                                <th>Accountant ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for objbillingh in objbillinghs %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{objbillingh.operator_id}}</td>
+                                <td>{{objbillingh.assign_date_time}}</td>
+                                <td>{{objbillingh.payment_start_date}}</td>
+                                <td>{{objbillingh.payment_end_date}}</td>
+                                <td>{{objbillingh.no_topup}}</td>
+                                <td>{{objbillingh.payment_validity}}days</td>
+                                <td>{{objbillingh.get_payment_status_display}}</td>
+                                <td>{{objbillingh.amount}}</td>
+                                <td>{{objbillingh.get_payment_method_display}}</td>
+                                <td>{% if objbillingh.netbanking_type%}{{objbillingh.get_netbanking_type_display}}{%else%} NA {%endif%}</td>
+                                <td>{{objbillingh.transaction_id}}</td>
+                                <td><a href="{{objbillingh.transaction_receipt.url}}" target="_blank">view</a></td>
+                                <td><a href="{{objbillingh.op_payment_receipt.url}}" target="_blank">view</a></td>
+                                <td>{{objbillingh.billing_receiver}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id='exptexcbillform' action="{% url 'netopbillhistory' opid=opid %}" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" name="exportexcelbillhistory" value="exportexcelbillhistory">
+                    <button type="submit" class="btn btn-secondary" style="float: right;">Export Excel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_ill_custid').bind('input', function() {
+        $(this).val(function(_, v) {
+            return v.replace(/\s+/g, '');
+        });
+    });
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Add ILL Connection</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'threesaillconnections'%}">ThreesaILLConnections</a></li>
+        <li class="breadcrumb-item active">Add</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Add ILL Connection</h3>
+                    </div>
+                    <div class="card-body">
+                        {{form.errors}}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_custid}}
+                                    {% if form.ill_custid.errors %}
+                                    <small class="help-block-none">{{form.ill_custid.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Name</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_cust_name}}
+                                    {% if form.ill_cust_name.errors %}
+                                    <small class="help-block-none">{{form.ill_cust_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Address</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{form.ill_cust_address}}
+                                        {% if form.ill_cust_address.errors %}
+                                        <small class="help-block-none">{{form.ill_cust_address.errors}}</small>
+                                        {% endif%}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.ill_cust_address_lat}}
+                                            {% if form.ill_cust_address_lat.errors %}
+                                            <small class="help-block-none">{{form.ill_cust_address_lat.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.ill_cust_address_long}}
+                                            {% if form.ill_cust_address_long.errors %}
+                                            <small class="help-block-none">{{form.ill_cust_address_long.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="getcurrloc_btn" class="btn btn-primary" style="color: white; margin-bottom: 5px;">GetCurrentLocation</a>
+                                    <a id="showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Type</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_conn_type}}
+                                    {% if form.ill_conn_type.errors %}
+                                    <small class="help-block-none">{{form.ill_conn_type.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Salesperson ID</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_sales_person}}
+                                    {% if form.ill_sales_person.errors %}
+                                    <small class="help-block-none">{{form.ill_sales_person.errors}}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Feasibility Status</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_feasibility}}
+                                    {% if form.ill_feasibility.errors %}
+                                    <small class="help-block-none">{{form.ill_feasibility.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{%url 'threesaillconnections'%}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="save" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

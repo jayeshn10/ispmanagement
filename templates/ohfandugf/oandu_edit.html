@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $('#oaushowlatlongmap').click(function() {
+        var aoaulat = $('#id_link_point_a_lat').val();
+        var aoaulong = $('#id_link_point_a_long').val();
+        var vuaoaulat = $('#id_link_point_via_lat').val();
+        var voaulong = $('#id_link_point_via_long').val();
+        var boaulat = $('#id_link_point_b_lat').val();
+        var boaulong = $('#id_link_point_b_long').val();
+        newUrl = "https://www.google.com/maps/dir/alat,along/vialat,vialong/blat,blong".replace('alat', aoaulat).replace('along', aoaulong).replace('vialat', vuaoaulat).replace('vialong', voaulong).replace('blat', boaulat).replace('blong', boaulong);
+
+
+        $(this).attr("href", newUrl); // Set herf value
+        //window.open(newUrl, "_blank", "width=0,height=0");
+    });
+
+    $("#a_getcurrloc_btn").click(function() { //user clicks button
+        if ("geolocation" in navigator) { //check geolocation available 
+            //try to get user current location using getCurrentPosition() method
+            navigator.geolocation.getCurrentPosition(function(position) {
+                $('#id_link_point_a_lat').val(position.coords.latitude);
+                $('#id_link_point_a_long').val(position.coords.longitude);
+
+            });
+        } else {
+            console.log("Browser doesn't support geolocation!");
+        }
+    });
+
+    $('#a_showlatlongmap').click(function() {
+        var connlat = $('#id_link_point_a_lat').val();
+        var connlong = $('#id_link_point_a_long').val();
+        var newlatlong = connlat + "+" + connlong;
+        newUrl = "https://www.google.com/maps/search/latlong".replace('latlong', newlatlong);
+        $(this).attr("href", newUrl); // Set herf value
+        //window.open(newUrl, "_blank", "width=0,height=0");
+    });
+
+    $("#via_getcurrloc_btn").click(function() { //user clicks button
+        if ("geolocation" in navigator) { //check geolocation available 
+            //try to get user current location using getCurrentPosition() method
+            navigator.geolocation.getCurrentPosition(function(position) {
+                $('#id_link_point_via_lat').val(position.coords.latitude);
+                $('#id_link_point_via_long').val(position.coords.longitude);
+
+            });
+        } else {
+            console.log("Browser doesn't support geolocation!");
+        }
+    });
+
+    $('#via_showlatlongmap').click(function() {
+        var connlat = $('#id_link_point_via_lat').val();
+        var connlong = $('#id_link_point_via_long').val();
+        var newlatlong = connlat + "+" + connlong;
+        newUrl = "https://www.google.com/maps/search/latlong".replace('latlong', newlatlong);
+        $(this).attr("href", newUrl); // Set herf value
+        //window.open(newUrl, "_blank", "width=0,height=0");
+    });
+    $("#b_getcurrloc_btn").click(function() { //user clicks button
+        if ("geolocation" in navigator) { //check geolocation available 
+            //try to get user current location using getCurrentPosition() method
+            navigator.geolocation.getCurrentPosition(function(position) {
+                $('#id_link_point_b_lat').val(position.coords.latitude);
+                $('#id_link_point_b_long').val(position.coords.longitude);
+
+            });
+        } else {
+            console.log("Browser doesn't support geolocation!");
+        }
+    });
+
+    $('#b_showlatlongmap').click(function() {
+        var connlat = $('#id_link_point_b_lat').val();
+        var connlong = $('#id_link_point_b_long').val();
+        var newlatlong = connlat + "+" + connlong;
+        newUrl = "https://www.google.com/maps/search/latlong".replace('latlong', newlatlong);
+        $(this).attr("href", newUrl); // Set herf value
+        //window.open(newUrl, "_blank", "width=0,height=0");
+    });
+
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{% if editper %}Edit{%else%}View{%endif%} OHF & UGF Link</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">Overall OHF & UGF</a></li>
+        <li class="breadcrumb-item active">{% if editper %}Edit{%else%}View{%endif%}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <h3 class="h4">{% if editper %}Edit{%else%}View{%endif%} OHF & UGF Link</h3>
+                        </div>
+                        <div class="col">
+                            <div class="row" style="float: right;">
+                                <a id="oaushowlatlongmap" target="_blank" class="btn btn-primary" style="color: white;">View Link ON Map</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if editper %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Code</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Name</label>
+                                <div class="col-sm-9">
+                                    {{form.link_name}}
+                                    {% if form.link_name.errors %}
+                                    <small class="help-block-none">{{form.link_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Dealer</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_dealer}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Vendor</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_vendor}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Taken Or Given</label>
+                                <div class="col-sm-9">
+                                    {{objoau.get_link_type_g_t_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Type</label>
+                                <div class="col-sm-9">
+                                    {{objoau.get_link_type_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Point A</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{form.link_point_a}}
+                                        {% if form.link_point_a.errors %}
+                                        <small class="help-block-none">{{form.link_point_a.errors}}</small>
+                                        {% endif%}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_a_lat}}
+                                            {% if form.link_point_a_lat.errors %}
+                                            <small class="help-block-none">{{form.link_point_a_lat.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_a_long}}
+                                            {% if form.link_point_a_long.errors %}
+                                            <small class="help-block-none">{{form.link_point_a_long.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="a_getcurrloc_btn" class="btn btn-primary" style="color: white; margin-bottom: 5px;">GetCurrentLocation</a>
+                                    <a id="a_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Via Route</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{form.link_point_via}}
+                                        {% if form.link_point_via.errors %}
+                                        <small class="help-block-none">{{form.link_point_via.errors}}</small>
+                                        {% endif%}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_via_lat}}
+                                            {% if form.link_point_via_lat.errors %}
+                                            <small class="help-block-none">{{form.link_point_via_lat.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_via_long}}
+                                            {% if form.link_point_via_long.errors %}
+                                            <small class="help-block-none">{{form.link_point_via_long.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="via_getcurrloc_btn" class="btn btn-primary" style="color: white; margin-bottom: 5px;">GetCurrentLocation</a>
+                                    <a id="via_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Point B</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{form.link_point_b}}
+                                        {% if form.link_point_b.errors %}
+                                        <small class="help-block-none">{{form.link_point_b.errors}}</small>
+                                        {% endif%}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_b_lat}}
+                                            {% if form.link_point_b_lat.errors %}
+                                            <small class="help-block-none">{{form.link_point_b_lat.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.link_point_b_long}}
+                                            {% if form.link_point_b_long.errors %}
+                                            <small class="help-block-none">{{form.link_point_b_long.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="b_getcurrloc_btn" class="btn btn-primary" style="color: white; margin-bottom: 5px;">GetCurrentLocation</a>
+                                    <a id="b_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                                <div class="col-sm-9">
+                                    {% if not objoau.assign_status%}
+                                    {{form.assign_fiber}}
+                                    {% if form.assign_fiber.errors %}
+                                    <small class="help-block-none">{{form.assign_fiber.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{objoau.assign_fiber}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not objoau.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objoau.sign_id}} - {{objoau.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Code</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Name</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Dealer</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_dealer}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Vendor</label>
+                                <div class="col-sm-9">
+                                    {{objoau.link_vendor}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Taken Or Given</label>
+                                <div class="col-sm-9">
+                                    {{objoau.get_link_type_g_t_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Type</label>
+                                <div class="col-sm-9">
+                                    {{objoau.get_link_type_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Point A</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{objoau.link_point_a}}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" id="id_link_point_a_lat" {%if objoau.link_point_a_lat %} value="{{objoau.link_point_a_lat}}" {%endif%}readonly class="form-control">
+                                            
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" id="id_link_point_a_long" {%if objoau.link_point_a_long %} value="{{objoau.link_point_a_long}}"  {%endif%} readonly class="form-control">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="a_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Via Route</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{objoau.link_point_via}}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" id="id_link_point_via_lat" {%if objoau.link_point_via_lat %} value="{{objoau.link_point_via_lat}}" {%endif%} class="form-control" readonly>
+                                            
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" id="i_link_point_via_long" {%if objoau.link_point_via_long %} value="{{objoau.link_point_via_long}}" {% endif %} class="form-control" readonly>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="via_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Point B</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{objoau.link_point_b}}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" {%if objoau.link_point_b_lat%} value="{{objoau.link_point_b_lat}}" {%endif%} id="id_link_point_b_lat" class="form-control" readonly>
+                                            
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            
+                                            <input type="text" {%if objoau.link_point_b_long %} value="{{objoau.link_point_b_long}}" {%endif%} id="id_link_point_b_long" class="form-control" readonly>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="b_showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                                <div class="col-sm-9">
+                                    {{objoau.assign_fiber}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not objoau.assign_status %}
+                                    Not Assigned
+                                    {% else %}
+                                    Assigned
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objoau.sign_id}} - {{objoau.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

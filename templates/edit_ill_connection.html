@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script type="text/javascript">
+   
+</script>
+{% endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if EditPer%}Edit{% else %}View{% endif %} ILL Connection</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">Threesa IIL Connections Details</a></li>
+        <li class="breadcrumb-item active">{%if EditPer%}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if EditPer%}Edit{% else %}View{% endif %} ILL Connection</h3>
+                    </div>
+                    <div class="card-body">
+                        {%if EditPer%}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {{form.errors}}
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_custid}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Name</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_cust_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Address</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{form.ill_cust_address}}
+                                        {% if form.ill_cust_address.errors %}
+                                        <small class="help-block-none">{{form.ill_cust_address.errors}}</small>
+                                        {% endif%}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.ill_cust_address_lat}}
+                                            {% if form.ill_cust_address_lat.errors %}
+                                            <small class="help-block-none">{{form.ill_cust_address_lat.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            {{form.ill_cust_address_long}}
+                                            {% if form.ill_cust_address_long.errors %}
+                                            <small class="help-block-none">{{form.ill_cust_address_long.errors}}</small>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="getcurrloc_btn" class="btn btn-primary" style="color: white; margin-bottom: 5px;">GetCurrentLocation</a>
+                                    <a id="showlatlongmap" class="btn btn-primary" target="_blank" href="" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Type</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.get_ill_conn_type_display}}
+                                </div>
+                            </div>
+                            {%if etlobj.ill_vendor_code %}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL Vendor</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_vendor_code.v_code}}
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Salesperson ID</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_sales_person}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Feasibility Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlobj.ill_feasibility %}
+                                    {{form.ill_feasibility}}
+                                    {% if form.ill_feasibility.errors %}
+                                    <small class="help-block-none">{{form.ill_feasibility.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    {{etlobj.get_ill_feasibility_display}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlobj.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_sign_id}} - {{etlobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="save" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else%}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_custid}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Name</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_cust_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Address</label>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        {{etlobj.ill_cust_address}}
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Latitude : </label>
+                                        <div class="col-md-4">
+                                            <input type="text" id="id_ill_cust_address_lat" value="{{etlobj.ill_cust_address_lat}}" class="form-control" readonly>
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">Longitude : </label>
+                                        <div class="col-md-4">
+                                            <input type="text" id="id_ill_cust_address_long" value="{{etlobj.ill_cust_address_long}}" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a id="showlatlongmap" class="btn btn-primary" target="_blank" style="color: white; margin-bottom: 5px;">Locate</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Type</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.get_ill_conn_type_display}}
+                                </div>
+                            </div>
+                            {%if etlobj.ill_vendor_code %}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL Vendor</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_vendor_code.v_code}}
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Salesperson ID</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_sales_person}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Feasibility Status</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.get_ill_feasibility_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if etlobj.assign_status %}
+                                    Assigned
+                                    {% else %}
+                                    not Assigned
+                                    {% endif %}</td>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlobj.ill_sign_id}} - {{etlobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

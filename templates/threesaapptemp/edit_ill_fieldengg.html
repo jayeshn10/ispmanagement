@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{% if EditPer %}Edit{% else %}View{% endif %} ILL Connection Field Engineer Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">ThreesaILLConnections</a></li>
+        <li class="breadcrumb-item">Threesa IIL Connection Field Engineer Details</li>
+        <li class="breadcrumb-item active">{% if EditPer %}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{% if EditPer %}Edit{% else %}View{% endif %} ILL Connection Field Engineer Details</h3>
+                    </div>
+                    <div class="card-body">
+                    	{% if EditPer%}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Status</label>
+                                <div class="col-sm-9">
+                                    {{form.link_status}}
+                                    {% if form.link_status.errors %}
+                                    <small class="help-block-none">{{form.link_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_name}}
+                                    {% if form.cust_cpn_name.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_num}}
+                                    {% if form.cust_cpn_num.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_num.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connectivity Image</label>
+                                <div class="col-sm-9">
+                                    {{form.connectivity_img}}
+                                    {% if form.connectivity_img.errors %}
+                                    <small class="help-block-none">{{form.connectivity_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Billing</label>
+                                <div class="col-sm-9">
+                                    {% if not etlfeobj.assign_status%}
+                                    {{form.assign_billing}}
+                                    {% if form.assign_billing.errors %}
+                                    <small class="help-block-none">{{form.assign_billing.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{etlfeobj.assign_billing}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlfeobj.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.ill_sign_id}} - {{etlfeobj.ill_sign_time}}
+                                </div>
+                            </div>
+
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Link Status</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.link_status}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.cust_cpn_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.cust_cpn_num}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connectivity Image</label>
+                                <div class="col-sm-9">
+                                    <a href="{{etlfeobj.connectivity_img.url}}" target="_blank">View</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Billing</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.assign_billing}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if etlfeobj.assign_status %}
+                                            Assigned
+                                            {% else %}
+                                            not Assigned
+                                            {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlfeobj.ill_sign_id}} - {{etlfeobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

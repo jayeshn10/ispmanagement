@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{% load static %}
+{%block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Dashboard</h2>
+    </div>
+</header>
+<!-- Dashboard Counts Section-->
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">Total Connections, Links And Operators</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center" style="margin-top: 25px">
+                    <div class="icon bg-violet"><i class="icon icon-page"></i></div>
+                    <div class="title"><span>Threesa<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_threesa_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center">
+                    <div class="icon bg-red"><i class="icon-check"></i></div>
+                    <div class="title"><span>Threesa<br>Through<br>Vendor<br>ILL</span>
+                    </div>
+                    <div class="number"><strong>{{count_ttv_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center">
+                    <div class="icon bg-green"><i class="icon-bill"></i></div>
+                    <div class="title"><span>Vendor<br>Through<br>Threesa<br>ILL</span>
+                    </div>
+                    <div class="number"><strong>{{count_vtt_ill}}</strong></div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center" style="margin-top: 25px;margin-bottom: 25px;">
+                    <div class="icon bg-orange"><i class="icon-form"></i></div>
+                    <div class="title"><span>OHF<br>Links</span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center" style="margin-top: 25px;margin-bottom: 25px;">
+                    <div class="icon bg-blue"><i class="icon-padnote"></i></div>
+                    <div class="title"><span>UGF<br>Links</span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-sm">
+                <div class="item d-flex align-items-center" style="margin-top: 25px; margin-bottom: 25px;">
+                    <div class="icon bg-yellow"><i class="icon-presentation"></i></div>
+                    <div class="title"><span>Total<br>Operators</span>
+                    </div>
+                    <div class="number"><strong>{{count_netop}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">Threesa ILL Connection Details</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Feasible<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_threesa_f_ill}}</strong>/<strong>{{count_threesa_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Done<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_threesa_d_ill}}</strong>/<strong>{{count_threesa_f_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Active<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_threesa_d_a_ill}}</strong>/<strong>{{count_threesa_d_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Deactive<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_threesa_d_d_ill}}</strong>/<strong>{{count_threesa_d_ill}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">Threesa Through Vendor ILL Connection Details</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Feasible<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ttv_f_ill}}</strong>/<strong>{{count_ttv_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Done<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ttv_d_ill}}</strong>/<strong>{{count_ttv_f_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Active<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ttv_d_a_ill}}</strong>/<strong>{{count_ttv_d_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Deactive<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ttv_d_d_ill}}</strong>/<strong>{{count_ttv_d_ill}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">Vendor Through Threesa ILL Connection Details</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Feasible<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_vtt_f_ill}}</strong>/<strong>{{count_vtt_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Done<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_vtt_d_ill}}</strong>/<strong>{{count_vtt_f_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Active<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_vtt_d_a_ill}}</strong>/<strong>{{count_vtt_d_ill}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Deactive<br>ILL<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_vtt_d_d_ill}}</strong>/<strong>{{count_vtt_d_ill}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">OHF Link Details</h3>
+        <div class="row bg-white has-shadow">
+             <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Total<br>OHF<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Links<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_g_links}}</strong>/<strong>{{count_ohf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Active<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_g_a_links}}</strong>/<strong>{{count_ohf_g_links}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Deactive<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_g_d_links}}</strong>/<strong>{{count_ohf_g_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Links<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_t_links}}</strong>/<strong>{{count_ohf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Active<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_t_a_links}}</strong>/<strong>{{count_ohf_t_links}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Deactive<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ohf_t_d_links}}</strong>/<strong>{{count_ohf_t_links}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">UGF Link Details</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Total<br>UGF<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_links}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Links<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_g_links}}</strong>/<strong>{{count_ugf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Active<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_g_a_links}}</strong>/<strong>{{count_ugf_g_links}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Given<br>Deactive<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_g_d_links}}</strong>/<strong>{{count_ugf_g_links}}</strong></div>
+                </div>
+            </div>
+             <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Links<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_t_links}}</strong>/<strong>{{count_ugf_links}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Active<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_t_a_links}}</strong>/<strong>{{count_ugf_t_links}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Taken<br>Deactive<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_ugf_t_d_links}}</strong>/<strong>{{count_ugf_t_links}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <h3 class="row bg-white has-shadow">Operator Details</h3>
+        <div class="row bg-white has-shadow">
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Total<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_netop}}</strong></div>
+                </div>
+            </div>
+            <!-- Item -->
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Active<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_netop_a}}</strong>/<strong>{{count_netop}}</strong></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="item d-flex align-items-center">
+                    <div class="title"><span>Deactive<br></span>
+                    </div>
+                    <div class="number"><strong>{{count_netop_d}}</strong>/<strong>{{count_netop}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</section>
+{% endblock maincontent%}

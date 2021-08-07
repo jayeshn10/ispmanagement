@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Tables</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'threesaillconnections'%}">App</a></li>
+        <li class="breadcrumb-item active">Module</li>
+    </ul>
+</div>
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="icon icon-search"></div>
+                        <input type="text" class="form-control" placeholder="search here">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary">Go!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <div class="input-group">
+                        <select name="account" class="form-control">
+                            <option>Action</option>
+                            <option>option 2</option>
+                            <option>option 3</option>
+                            <option>option 4</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Striped table with hover effect</h3>
+                        <div class="card-table-btn">
+                            <a type="button" id="closeCard3" class="btn btn-primary" href="{% url 'addillcon' %}">ADD</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input id="checkboxCustom1" type="checkbox" value="" class="checkbox-template"></th>
+                                        <th>Sr.No.</th>
+                                        <th>Connection ID</th>
+                                        <th>Lead Generation Date</th>
+                                        <th>Cusstomer Name</th>
+                                        <th>Customer Address</th>
+                                        <th>Sales Person ID</th>
+                                        <th>Feasibility Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tlcobj in  tlcobjs %}
+                                    <tr>
+                                        <td><input id="{{tlcobj.id}}" type="checkbox" value="" class="checkbox-template"></td>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{tlcobj.ill_custid}}</td>
+                                        <td>{{tlcobj.ill_gendate}}</td>
+                                        <td>{{tlcobj.ill_cust_name}}</td>
+                                        <td>{{tlcobj.ill_cust_address}}</td>
+                                        <td>{{tlcobj.ill_sales_person}}</td>
+                                        <td>{{tlcobj.ill_feasibility}}</td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="recent-updates card">
+                    <div class="card-header">
+                        <h3 class="h4">Filter By</h3>
+                    </div>
+                    <div class="card-body no-padding">
+                        <!-- Item-->
+                        <div class="item d-flex justify-content-between">
+                            <div class="info d-flex">
+                                <div class="title">
+                                    <h5>By Lead Generation Date</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="item d-flex justify-content-between">
+                            <div class="info d-flex">
+                                <div class="title">
+                                    <h5>By Lead Generation Date</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="item d-flex justify-content-between">
+                            <div class="info d-flex">
+                                <div class="title">
+                                    <h5>By Lead Generation Date</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="item d-flex justify-content-between">
+                            <div class="info d-flex">
+                                <div class="title">
+                                    <h5>By Lead Generation Date</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="item d-flex justify-content-between">
+                            <div class="info d-flex">
+                                <div class="title">
+                                    <h5>By Lead Generation Date</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent%}

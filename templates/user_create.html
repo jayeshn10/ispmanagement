@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_username').bind('input', function() {
+        $(this).val(function(_, v) {
+            return v.replace(/\s+/g, '');
+        });
+    });
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Create User</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">Create User</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">User Registration</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">User Name</label>
+                                <div class="col-sm-9">
+                                    {{form.username}}
+                                    {% if form.username.errors %}
+                                    <small class="help-block-none">{{form.username.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Full Name</label>
+                                <div class="col-sm-9">
+                                    {{form.user_full_name}}
+                                    {% if form.user_full_name.errors %}
+                                    <small class="help-block-none">{{form.user_full_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Email</label>
+                                <div class="col-sm-9">
+                                    {{form.email}}
+                                    {% if form.email.errors %}
+                                    <small class="help-block-none">{{form.email.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Mobile Number</label>
+                                <div class="col-sm-9">
+                                    {{form.user_mobile}}
+                                    {% if form.user_mobile.errors %}
+                                    <small class="help-block-none">{{form.user_mobile.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Profile Image</label>
+                                <div class="col-sm-9">
+                                    {{form.user_image}}
+                                    {% if form.user_image.errors %}
+                                    <small class="help-block-none">{{form.user_image.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Job Role</label>
+                                <div class="col-sm-9">
+                                    {{form.groups}}
+                                    {% if form.groups.errors %}
+                                    <small class="help-block-none">{{form.groups.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Password</label>
+                                <div class="col-sm-9">
+                                    {{form.password1}}
+                                    {% if form.password1.errors %}
+                                    <small class="help-block-none">{{form.password1.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Confirm Password</label>
+                                <div class="col-sm-9">
+                                    {{form.password2}}
+                                    {% if form.password2.errors %}
+                                    <small class="help-block-none">{{form.password2.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

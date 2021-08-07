@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load static%}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    var modalDiv = $("#modal-div-ag-hist");
+    $(".open-modal-ag-hist").on("click", function() {
+        $.ajax({
+            type: 'GET',
+            url: $(this).attr("data-url"),
+            success: function(data) {
+                modalDiv.html(data);
+                $("#myAgHist").modal();
+            }
+        });
+    });
+    //terminate Agreement
+    $('#alltercb').change(function() {
+        if ($(this).prop('checked')) {
+            $('tbody tr td input[type="checkbox"]').each(function() {
+
+                $(this).prop('checked', true);
+                var id = $(this).attr("id");
+                valhtml = $("label[for=" + id + "]").html();
+                $("#termhtml" + id + "").html(valhtml);
+            });
+        } else {
+            $('tbody tr td input[type="checkbox"]').each(function() {
+                $(this).prop('checked', false);
+                var id = $(this).attr("id");
+                $("#termhtml" + id + "").html("");
+            });
+        }
+    });
+
+
+    $('input[type="checkbox"]').click(function() {
+        var id2 = $(this).attr("id");
+        valhtml = $("label[for=" + id2 + "]").html();
+
+        if ($(this).is(":checked")) {
+            $("#termhtml" + id2 + "").html(valhtml);
+        } else {
+            $("#termhtml" + id2 + "").html("");
+        }
+    });
+});
+</script>
+{% endblock%}
+{%block blockstyle%}
+<style>
+</style>
+{%endblock%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Overall OHF and UGF</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">Overall OHF and UGF</li>
+    </ul>
+</div>
+<div class="leftrightscroll">
+    <button id="left-button">&#8249;</button>
+    <button id="right-button">&#8250;</button>
+</div>
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="icon icon-search"></div>
+                            <input type="text" class="form-control" placeholder="search here" name="searchqry">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="num_page" value="{{rowcount}}">
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Go!" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="h4">Overall OHF and UGF</h3>
+                                </div>
+                                <div class="col">
+                                    {%if request.user.is_staff or request.user|has_group:"OhfAndUgfManager"%}
+                                    <a type="button" id="closeCard3" class="btn btn-primary" href="{% url 'addohfandugf' %}" style="float: right;">ADD</a>
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <form class="form-inline" method="GET">
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_code}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_name}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_dealer}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_vendor}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_type_g_t}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_type}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_point_a}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_point_via}}</div>
+                                    <div class="form-group form-gr-margin">{{oandufilter.form.link_point_b}}</div>
+                                    <div class="form-group form-gr-margin"><input type="submit" class="btn btn-primary" value="Filter"></div>
+                                    <div class="form-group form-gr-margin"><a href="?" class="btn btn-primary">Clear</a></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                {% if objoau_all.has_other_pages %}
+                                <div class="pagination">
+                                    {% if objoau_all.has_previous %}
+                                    <a href="{% relative_url objoau_all.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in objoau_all.paginator.page_range %}
+                                    {% if objoau_all.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if objoau_all.number|add:"-1" == i or objoau_all.number|add:"-2" == i or objoau_all.number|add:1 == i or objoau_all.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if objoau_all.has_next %}
+                                    <a href="{% relative_url objoau_all.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4 pagination-itemsperp">
+                                <form name="myFormItemsPerPage" method="get">
+                                    <label><span class="sipe">Show</span><span class="sipe"><select id="num_page" name="num_page" class="form-control num_page">
+                                                {% for x, y in itemperform.fields.num_page.choices %}
+                                                <option value="{{ x }}" {% if rowcount == x %} selected{% endif %}>{{ y }}</option>
+                                                {% endfor %}
+                                            </select></span><span class="sipe">entries</span></label>
+                                    {% if itemperform.num_page.errors %}
+                                    <small class="help-block-none">{{itemperform.num_page.errors}}</small>
+                                    {% endif%}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" value="" class="checkbox-template" id="alltercb" name="alltercb" /></th>
+                                        <th>Sr.No.</th>
+                                        <th>Link Code</th>
+                                        <th>Name</th>
+                                        <th>Link Dealer</th>
+                                        <th>Vendor</th>
+                                        <th>Link Type</th>
+                                        <th>Agreement Start Date</th>
+                                        <th>Agreement End Date</th>
+                                        <th>Point A</th>
+                                        <th>Link Via</th>
+                                        <th>Point B</th>
+                                        <th>Fiber Details</th>
+                                        <th>Billing Details</th>
+                                        {%if request.user.is_staff or request.user|has_group:"billingteam" or request.user|has_group:"OhfAndUgfManager"%}
+                                        <th>Renew Billing</th>
+                                        {%endif%}
+                                        <th>Status</th>
+                                        <th>Billing History</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for objoau in objoau_all%}
+                                    <tr {%if not objoau.link_status %} class="deactive-link dahov" {%else%}{%if objoau.link_billing_code%} {% connectionpurplemaker objoau.link_billing_code.link_end_date as myresult %}{%if myresult %}style = 'color:#9932CC;'{%endif%}{%endif%}{%endif%}>
+                                        <td><input id="tercb{{objoau.id}}" name="terpcb[]" type="checkbox" value="{{objoau.id}}" class="checkbox-template" form="terminateAg_form">
+                                            <label style="display:none;" for="tercb{{objoau.id}}"> {{objoau.link_code}}</label></td>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td><a href="{%url 'editohfandugf' objoau.id %}">{{objoau.link_code}}</a></td>
+                                        <td>{{objoau.link_name}}</td>
+                                        <td>{{objoau.link_dealer}}</td>
+                                        <td>{{objoau.link_vendor}}</td>
+                                        <td>{{objoau.get_link_type_display}}</td>
+                                        <td>{%if objoau.link_billing_code %}{{objoau.link_billing_code.link_start_date}}{%else%}Pending{%endif%}</td>
+                                        <td>{%if objoau.link_billing_code %}{{objoau.link_billing_code.link_end_date}}{%else%}Pending{%endif%}</td>
+                                        <td>{{objoau.link_point_a}}</td>
+                                        <td>{{objoau.link_point_via}}</td>
+                                        <td>{{objoau.link_point_b}}</td>
+                                        <td>{%if objoau.link_fiber_code.id %}
+                                            <a href="{% url 'editohfandugffiber' objoau.link_fiber_code.id %}">Fiber Details</a>
+                                            {%else%}
+                                            none
+                                            {%endif%}
+                                        </td>
+                                        <td>{%if objoau.link_billing_code.id %}
+                                            <a href="{% url 'editohfandugfbilling' objoau.link_billing_code.id %}">Billing Details</a>
+                                            {%else%}
+                                            none
+                                            {%endif%}
+                                        </td>
+                                        {%if request.user.is_staff or request.user|has_group:"billingteam" or request.user|has_group:"OhfAndUgfManager" %}
+                                        <td>
+                                            {%if objoau.link_billing_code %}
+                                            {%if not objoau.link_status%}
+                                            <a href="{% url 'renewohfandugfbilling' objoau.link_billing_code.id %}" class="btn btn-primary">Renew</a>
+                                            {% else %}
+                                            NA
+                                            {% endif %}
+                                            {% else %}
+                                            NA
+                                            {% endif %}
+                                        </td>
+                                        {%endif%}
+                                        <td>{{objoau.get_link_status_display}}</td>
+                                        <td>
+                                            {%if objoau %}
+                                            <a class="btn btn-primary open-modal-ag-hist" data-url="{% url 'historyohfandugfbilling' hioaubid=objoau.link_code %}" style="color:#fff;">Link&nbspBilling&nbspHistory</a>
+                                            <div id="modal-div-ag-hist"></div>
+                                            {%endif%}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-8">
+                                {% if objoau_all.has_other_pages %}
+                                <div class="pagination">
+                                    {% if objoau_all.has_previous %}
+                                    <a href="{% relative_url objoau_all.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in objoau_all.paginator.page_range %}
+                                    {% if objoau_all.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if objoau_all.number|add:"-1" == i or objoau_all.number|add:"-2" == i or objoau_all.number|add:1 == i or objoau_all.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if objoau_all.has_next %}
+                                    <a href="{% relative_url objoau_all.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4">
+                                <form method="POST" style="float: right;">
+                                    {%csrf_token%}
+                                    <input type="hidden" name="exportexcel" value="exportexcel">
+                                    <input type="submit" class="btn btn-secondary" value="Export Excel">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent%}

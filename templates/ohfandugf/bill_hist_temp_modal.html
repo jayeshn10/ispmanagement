@@ -1,0 +1,65 @@
+<div id="myAgHist" tabindex="-1" role="dialog" aria-labelledby="AghistModalLabel" aria-hidden="true" class="modal fade text-left">
+    <div role="document" class="modal-dialog modal-dialog-pkghis">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="AghistModalLabel" class="modal-title">Link Agreement History</h4>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Link Code</th>
+                                <th>Assign Date Time</th>
+                                <th>Agreement Start Date</th>
+                                <th>Agreement End Date</th>
+                                <th>Validity</th>
+                                <th>Agreement Files</th>
+                                <th>Payment Status</th>
+                                <th>Amount(₹)</th>
+                                <th>Payment Method</th>
+                                <th>Netbanking Type</th>
+                                <th>Transaction Id</th>
+                                <th>Transaction Receipt</th>
+                                <th>Invoice</th>
+                                <th>Accountant ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for billhistobj in billhistobj_all %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{billhistobj.link_code}}</td>
+                                <td>{{billhistobj.assign_date_time}}</td>
+                                <td>{{billhistobj.link_start_date}}</td>
+                                <td>{{billhistobj.link_end_date}}</td>
+                                <td>{{billhistobj.link_validity}}days</td>
+                                <td><a href="{{billhistobj.agreement_file.url}}" target="_blank">View</a></td>
+                                <td>{{billhistobj.get_payment_status_display}}</td>
+                                <td>{{billhistobj.amount}}</td>
+                                <td>{{billhistobj.get_payment_method_display}}</td>
+                                <td>{%if billhistobj.netbanking_type %}{{billhistobj.get_netbanking_type_display}}
+                                    {%endif%}</td>
+                                <td>{{billhistobj.transaction_id}}</td>
+                                <td><a href="{{billhistobj.transaction_receipt.url}}">view</a></td>
+                                <td><a href="{{billhistobj.billing_img.url}}">view</a></td>
+                                <td>{{billhistobj.billing_receiver}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id='exptexcbillform' action="{% url 'historyohfandugfbilling' hioaubid=hioaubid %}" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" name="exportexcelbillhistory" value="exportexcelbillhistory">
+                    <button type="submit" class="btn btn-secondary" style="float: right;">Export Excel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

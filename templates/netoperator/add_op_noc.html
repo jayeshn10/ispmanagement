@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Add Operator NOC Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'netoperators'%}">Operators</a></li>
+        <li class="breadcrumb-item">Operator NOC Details</li>
+        <li class="breadcrumb-item active">Add</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Add Operator Noc Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Id</label>
+                                <div class="col-sm-9">
+                                    {{objnn.link_code}}
+                                    {{form.operator_id}}
+                                    {% if form.operator_id.errors %}
+                                    <small class="help-block-none">{{form.operator_id.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{objnn.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Server IP</label>
+                                <div class="col-sm-9">
+                                    {{form.server_ip}}
+                                    {% if form.server_ip.errors %}
+                                    <small class="help-block-none">{{form.server_ip.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Subnet</label>
+                                <div class="col-sm-9">
+                                    {{form.subnet}}
+                                    {% if form.subnet.errors %}
+                                    <small class="help-block-none">{{form.subnet.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Gateway</label>
+                                <div class="col-sm-9">
+                                    {{form.gateway}}
+                                    {% if form.gateway.errors %}
+                                    <small class="help-block-none">{{form.gateway.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">DNS</label>
+                                <div class="col-sm-9">
+                                    {{form.dns}}
+                                    {% if form.dns.errors %}
+                                    <small class="help-block-none">{{form.dns.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">DNS2</label>
+                                <div class="col-sm-9">
+                                    {{form.dns2}}
+                                    {% if form.dns2.errors %}
+                                    <small class="help-block-none">{{form.dns2.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Switch IP</label>
+                                <div class="col-sm-9">
+                                    {{form.switch_ip}}
+                                    {% if form.switch_ip.errors %}
+                                    <small class="help-block-none">{{form.switch_ip.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Switch Port No</label>
+                                <div class="col-sm-9">
+                                    {{form.switch_port_no}}
+                                    {% if form.switch_port_no.errors %}
+                                    <small class="help-block-none">{{form.switch_port_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">VLAND</label>
+                                <div class="col-sm-9">
+                                    {{form.vland}}
+                                    {% if form.vland.errors %}
+                                    <small class="help-block-none">{{form.vland.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">MAC Address</label>
+                                <div class="col-sm-9">
+                                    {{form.mac_add}}
+                                    {% if form.mac_add.errors %}
+                                    <small class="help-block-none">{{form.mac_add.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Routing Status</label>
+                                <div class="col-sm-9">
+                                    {{form.routing_status}}
+                                    {% if form.routing_status.errors %}
+                                    <small class="help-block-none">{{form.routing_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Billing</label>
+                                <div class="col-sm-9">
+                                    {{form.assign_billing}}
+                                    {% if form.assign_billing.errors %}
+                                    <small class="help-block-none">{{form.assign_billing.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{% url 'netoperators' %}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static%}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+</script>
+{% endblock%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Shift Connection History</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">Shift Connection History</li>
+    </ul>
+</div>
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="icon icon-search"></div>
+                            <input type="text" class="form-control" placeholder="search here" name="searchqry">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="num_page" value="{{rowcount}}">
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Go!" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="h4">Shift Connection History</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                {% if obj_Shifthistoryall.has_other_pages %}
+                                <div class="pagination">
+                                    {% if obj_Shifthistoryall.has_previous %}
+                                    <a href="{% relative_url obj_Shifthistoryall.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in obj_Shifthistoryall.paginator.page_range %}
+                                    {% if obj_Shifthistoryall.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if obj_Shifthistoryall.number|add:"-1" == i or obj_Shifthistoryall.number|add:"-2" == i or obj_Shifthistoryall.number|add:1 == i or obj_Shifthistoryall.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if obj_Shifthistoryall.has_next %}
+                                    <a href="{% relative_url obj_Shifthistoryall.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col pagination-itemsperp">
+                                <form name="myFormItemsPerPage" method="get">
+                                    <input type="hidden" name="page" value="1">
+                                    <label><span class="sipe">Show</span><span class="sipe"><select id="num_page" name="num_page" class="form-control num_page">
+                                                {% for x, y in itemperform.fields.num_page.choices %}
+                                                <option value="{{ x }}" {% if rowcount == x %} selected{% endif %}>{{ y }}</option>
+                                                {% endfor %}
+                                            </select></span><span class="sipe">entries</span></label>
+                                    {% if itemperform.num_page.errors %}
+                                    <small class="help-block-none">{{itemperform.num_page.errors}}</small>
+                                    {% endif%}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No.</th>
+                                        <th>User</th>
+                                        <th>Connection Id</th>
+                                        <th>Shifted From</th>
+                                        <th>Shifted To</th>
+                                        <th>Shifted Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for obj_Shifthistory in obj_Shifthistoryall %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{obj_Shifthistory.shifter_user}}</td>
+                                        <td>{{obj_Shifthistory.shift_conn_id}}</td>
+                                        <td>{{obj_Shifthistory.shift_from}}</td>
+                                        <td>{{obj_Shifthistory.shift_to}}</td>
+                                        <td>{{obj_Shifthistory.shift_date}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                {% if obj_Shifthistoryall.has_other_pages %}
+                                <div class="pagination">
+                                    {% if obj_Shifthistoryall.has_previous %}
+                                    <a href="{% relative_url obj_Shifthistoryall.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in obj_Shifthistoryall.paginator.page_range %}
+                                    {% if obj_Shifthistoryall.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if obj_Shifthistoryall.number|add:"-1" == i or obj_Shifthistoryall.number|add:"-2" == i or obj_Shifthistoryall.number|add:1 == i or obj_Shifthistoryall.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if obj_Shifthistoryall.has_next %}
+                                    <a href="{% relative_url obj_Shifthistoryall.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <form method="POST" style="float: right;">
+                                        {%csrf_token%}
+                                        <input type="hidden" name="exportexcel" value="exportexcel">
+                                        <input type="submit" class="btn btn-secondary" value="Export Excel">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+{% endblock maincontent%}

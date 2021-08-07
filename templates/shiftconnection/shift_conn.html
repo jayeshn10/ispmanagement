@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static%}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#connidcheck').click(function() {
+        var newconnid = $('#txtName').val();
+        if (!newconnid) {
+            newconnid = 'emptyid'
+        }
+        newUrl = "{%url 'shiftconncheck' 'ccid' %}".replace('ccid', newconnid);
+        $(this).attr("data-url", newUrl); // Set herf value
+        $.ajax({
+            type: 'GET',
+            url: $(this).attr("data-url"),
+            success: function(data) {
+                $('#conntype').html(data);
+            }
+        });
+    });
+
+    
+
+
+
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Shift ILL Connection</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">Shift Connection</li>
+    </ul>
+</div>
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="txtName" required>
+                            <div class="input-group-append">
+                                <a id="connidcheck" class="btn btn-primary" style="color: white;">Check!</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="conntype">
+        </div>
+    </div>
+</section>
+{% endblock maincontent%}

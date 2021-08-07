@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+
+    $('#pingform').submit(function(e) {
+        e.preventDefault();
+        var newip = $('#ping_ip').val();
+        newUrl = "{%url '3saipping' 'ipad' %}".replace('ipad', newip);
+        $.ajax({
+            type: 'GET', // GET or POST
+            url: newUrl, // the file to call
+            success: function(data) {
+                $("#modal-div").html(data);
+                $("#myPing").modal();
+                $('#pingpost').html('<button id="pingip" class="btn btn-primary" style="color: white;">Ping!</button>');
+            },
+            error: function(response) {
+                // alert the error if any error occured
+                alert(response["responseJSON"]["error"]);
+            }
+
+        });
+        $('#pingpost').html('<div class="spinner-border" style="margin-left:8px;"></div>');
+
+    });
+
+
+    $('#repingip').click(function() {
+
+        var newip = $('#ping_ip').val();
+        newUrl = "{%url '3saipping' 'ipad' %}".replace('ipad', newip);
+        $(this).attr("data-url", newUrl); // Set herf value
+        $.ajax({
+            type: 'GET',
+            url: $(this).attr("data-url"),
+            success: function(data) {
+                $("#modal-div").html(data);
+                $('#pingloder').hide();
+                $('#repingip').show();
+            }
+        });
+        $('#repingip').hide();
+        $('#pingloder').show();
+
+    });
+
+    $('#pingloder').hide();
+
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{% if EditPer %}Edit{% else %}View{% endif %} VTT ILL Connection NOC Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">VendorThroughThreesaILLConnections</a></li>
+        <li class="breadcrumb-item">VTT IIL Connection NOC Details</li>
+        <li class="breadcrumb-item active">{% if EditPer %}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row" style="display: inline-block; margin-bottom: 10px;">
+                                <div class="col">
+                                    <h3 class="h4">{% if EditPer %}Edit{% else %}View{% endif %} VTT ILL Connection Noc Details</h3>
+                                </div>
+                            </div>
+                            <div class="row" style="float: right; display: inline-block;">
+                                <div class="col">
+                                    <form id="pingform">
+                                        <div class="input-group">
+                                            <div class="input-group-append">
+                                                <input type="text" name="ping_ip" id="ping_ip" class="form-control" required>
+                                                <div id="pingpost">
+                                                    <button id="pingip" class="btn btn-primary" style="color: white;">Ping!</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {%if EditPer%}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL IP</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_ip}}
+                                    {% if form.ill_ip.errors %}
+                                    <small class="help-block-none">{{form.ill_ip.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Subnet</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_subnet}}
+                                    {% if form.ill_subnet.errors %}
+                                    <small class="help-block-none">{{form.ill_subnet.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Gateway</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_gateway}}
+                                    {% if form.ill_gateway.errors %}
+                                    <small class="help-block-none">{{form.ill_gateway.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill DNS</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_dns}}
+                                    {% if form.ill_dns.errors %}
+                                    <small class="help-block-none">{{form.ill_dns.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL DNS2</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_dns2}}
+                                    {% if form.ill_dns2.errors %}
+                                    <small class="help-block-none">{{form.ill_dns2.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Switch IP</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_switch_ip}}
+                                    {% if form.ill_switch_ip.errors %}
+                                    <small class="help-block-none">{{form.ill_switch_ip.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Switch Port No</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_switch_port_no}}
+                                    {% if form.ill_switch_port_no.errors %}
+                                    <small class="help-block-none">{{form.ill_switch_port_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Bandwidth</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_bandwidth}}
+                                    {% if form.ill_bandwidth.errors %}
+                                    <small class="help-block-none">{{form.ill_bandwidth.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill VLAND</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_vland}}
+                                    {% if form.ill_vland.errors %}
+                                    <small class="help-block-none">{{form.ill_vland.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">MAC Address</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_mac_add}}
+                                    {% if form.ill_mac_add.errors %}
+                                    <small class="help-block-none">{{form.ill_mac_add.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Routing Status</label>
+                                <div class="col-sm-9">
+                                    {{form.ill_routing_status}}
+                                    {% if form.ill_routing_status.errors %}
+                                    <small class="help-block-none">{{form.ill_routing_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Field Engineer</label>
+                                <div class="col-sm-9">
+                                    {% if not etlnobj.assign_status%}
+                                    {{form.assign_field_engg}}
+                                    {% if form.assign_field_engg.errors %}
+                                    <small class="help-block-none">{{form.assign_field_engg.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{etlnobj.assign_field_engg}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlnobj.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_sign_id}} - {{etlnobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else%}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.conn_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL IP</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_ip}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Subnet</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_subnet}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Gateway</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_gateway}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill DNS</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_dns}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">ILL DNS2</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_dns2}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Switch IP</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_switch_ip}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Switch Port No</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_switch_port_no}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill Bandwidth</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_bandwidth}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Ill VLAND</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_vland}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">MAC Address</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_mac_add}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Routing Status</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.get_ill_routing_status_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Field Engineer</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.assign_field_engg}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if etlfobj.assign_status %}
+                                    Assigned
+                                    {% else %}
+                                    not Assigned
+                                    {% endif %}</td>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlnobj.ill_sign_id}} - {{etlnobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="myPing" tabindex="-1" role="dialog" aria-labelledby="PingModalLabel" aria-hidden="true" class="modal fade text-left">
+            <div role="document" class="modal-dialog modal-dialog-ping">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div id="repingpost">
+                            <a id="repingip" class="btn-sm btn-primary" style="color: white; margin-right:8px;cursor: pointer;">RePing!</a>
+                            <div class="spinner-border" id='pingloder' style="margin-right:8px;"></div>
+                        </div>
+                        <h4 id="PingModalLabel" class="modal-title">Ping IP Address</h4>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="card-body cmdmodal">
+                        <div id="modal-div"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

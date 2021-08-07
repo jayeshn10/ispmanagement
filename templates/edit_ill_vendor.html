@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if editper %}Edit{% else%} view{%endif%} ILL Vendor</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">ILL Vendor</a></li>
+        <li class="breadcrumb-item active">{%if editper %}Edit{% else%} view{%endif%}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if editper %}Edit{% else%} view{%endif%} ILL Vendor</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if editper %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Code</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Name</label>
+                                <div class="col-sm-9">
+                                    {{form.v_name}}
+                                    {% if form.v_name.errors %}
+                                    <small class="help-block-none">{{form.v_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Contact Number</label>
+                                <div class="col-sm-9">
+                                    {{form.v_contactno}}
+                                    {% if form.v_contactno.errors %}
+                                    <small class="help-block-none">{{form.v_contactno.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Office Address</label>
+                                <div class="col-sm-9">
+                                    {{form.v_address}}
+                                    {% if form.v_address.errors %}
+                                    <small class="help-block-none">{{form.v_address.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's KYC Details</label>
+                                <div class="col-sm-9">
+                                    {{form.v_kyc}}
+                                    {% if form.v_kyc.errors %}
+                                    <small class="help-block-none">{{form.v_kyc.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Venddor's GST No.</label>
+                                <div class="col-sm-9">
+                                    {{form.v_gstno}}
+                                    {% if form.v_gstno.errors %}
+                                    <small class="help-block-none">{{form.v_gstno.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else %}
+                        <div class="form-horizontal">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Code</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_code}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Name</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor Contact Number</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_contactno}}
+                          
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's Office Address</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_address}}
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Vendor's KYC Details</label>
+                                <div class="col-sm-9">
+                                    <a href="{{illvendorobj.v_kyc.url}}" target="_blank">view</a>
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Venddor's GST No.</label>
+                                <div class="col-sm-9">
+                                    {{illvendorobj.v_gstno}}
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

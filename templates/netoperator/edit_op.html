@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% load static %}
+{%block blockjs%}
+<script>
+    var form_num = 0;
+     $(document).ready(function() {
+     	$("#minuszonebtn").hide();
+       $("#addzone").click(function() {
+       form_num ++;
+       $("input[id='id_form-TOTAL_FORMS']").attr('value', form_num + 1);
+          $("#zonediv").append("<div class='form-group row' id='id_form-" + form_num +"'><label for='id_form-" + form_num + "-zone_name' class='col-sm-2 form-control-label'>zone name : </label><div class='col-md-4'><input id='id_form-" + form_num + "-zone_name' type='text' value='' name='form-" + form_num + "-zone_name' class='form-control' required /></div><label for='id_form-" + form_num + "-zone_area' class='col-sm-2 form-control-label'>zone area : </label><div class='col-md-4'><input id='id_form-" + form_num + "-zone_area' type='text' value='' name='form-" + form_num + "-zone_area' class='form-control' required /></div></div>");
+          if (form_num == 1)
+		{
+			$("#minuszonebtn").show();
+		}
+       });
+
+       $("#minuszonebtn").click(function() {
+       	var xval = $("input[id='id_form-TOTAL_FORMS']").val() - 1;
+       	var ddivid = "id_form-" + xval +""
+
+       
+       if ($('#id_form-TOTAL_FORMS').val() > 1) {
+       		$("#"+ddivid+"").remove();
+       		$("input[id='id_form-TOTAL_FORMS']").val(xval);
+       		form_num--;
+			}
+		if (form_num == 0)
+		{
+			$("#minuszonebtn").hide();
+		}
+		});
+
+     });
+  </script>
+{%endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Add Operator</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'netoperators'%}">Operators</a></li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Edit Operators</h3>
+                    </div>
+                    <div class="card-body">
+                        {%if editper %}
+                        {{form.errors}}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Id</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.operator_id}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Registration Date</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.Operator_register}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Name</label>
+                                <div class="col-sm-9">
+                                    {{form.operator_name}}
+                                    {% if form.operator_name.errors %}
+                                    <small class="help-block-none">{{form.operator_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Zones <div style="float: right;"><a id="addzone" class="btn-sm btn-primary" style="color: white; margin-bottom: 10px; margin-right: 5px;">Add Zone</a><a id="minuszonebtn" class="btn-sm btn-primary" style="color: white; margin-bottom: 10px;">X</a></div></label>
+                                <div class="col-sm-9">
+                                    {{ formset.management_form }}
+                                    {%for opz in objnetop.zones.all %}
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">zone name : </label>
+                                        <div class="col-md-4">
+                                            {{ opz.zone_name}}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">zone area : </label>
+                                        <div class="col-md-4">
+                                            {{ opz.zone_area}}
+                                        </div>
+                                    </div>
+                                    {%endfor%}
+                                    <div id="zonediv"></div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Dealer Name</label>
+                                <div class="col-md-9">
+                                    {{objnetop.operator_dealer}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Contact Person Name</label>
+                                <div class="col-md-9">
+                                    {{form.op_contact_pname}}
+                                    {% if form.op_contact_pname.errors %}
+                                    <small class="help-block-none">{{form.op_contact_pname.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{form.op_contact_pnum}}
+                                    {% if form.op_contact_pnum.errors %}
+                                    <small class="help-block-none">{{form.op_contact_pnum.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">KYC Document</label>
+                                <div class="col-sm-9">
+                                    {{form.op_kyc}}
+                                    {% if form.op_kyc.errors %}
+                                    <small class="help-block-none">{{form.op_kyc.errors}}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                                <div class="col-sm-9">
+                                    {% if not objnetop.assign_status%}
+                                    {{form.assign_fiber}}
+                                    {% if form.assign_fiber.errors %}
+                                    <small class="help-block-none">{{form.assign_fiber.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{objnetop.assign_fiber}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not objnetop.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.sign_id}} - {{objnetop.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else %}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Id</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.operator_id}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Registration Date</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.Operator_register}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator Name</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.operator_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Zones</label>
+                                <div class="col-sm-9">
+                                    {%for opz in objnetop.zones.all %}
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">zone name : </label>
+                                        <div class="col-md-4">
+                                            {{ opz.zone_name}}
+                                        </div>
+                                        <label class="col-sm-2 form-control-label">zone area : </label>
+                                        <div class="col-md-4">
+                                            {{ opz.zone_area}}
+                                        </div>
+                                    </div>
+                                    {%endfor%}
+                                    <div id="zonediv"></div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Dealer Name</label>
+                                <div class="col-md-9">
+                                    {{objnetop.operator_dealer}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Contact Person Name</label>
+                                <div class="col-md-9">
+                                    {{objnetop.op_contact_pname}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.op_contact_pnum}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">KYC Document</label>
+                                <div class="col-sm-9">
+                                    <a href="{{objnetop.op_kyc.url}}">view</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.assign_fiber.username}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.get_assign_status_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objnetop.sign_id}} - {{objnetop.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

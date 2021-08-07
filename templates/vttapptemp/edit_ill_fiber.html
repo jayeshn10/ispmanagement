@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{% if EditPer %}Edit{% else %}View{% endif %}VTT ILL Connection Fiber Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">VendorThroughThreesaILLConnections</a></li>
+        <li class="breadcrumb-item">VTT IIL Connection Fiber Details</li>
+        <li class="breadcrumb-item active">{% if EditPer %}Edit{% else %}View{% endif %}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{% if EditPer %}Edit{% else %}View{% endif %}VTT ILL Connection Fiber Details</h3>
+                    </div>
+                    <div class="card-body">
+                        {%if EditPer%}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            {{form.errors}}
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.conn_code}}
+        
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Media Image</label>
+                                <div class="col-sm-9">
+                                    {{form.media_img}}
+                                    {% if form.media_img.errors %}
+                                    <small class="help-block-none">{{form.media_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Switch Image</label>
+                                <div class="col-sm-9">
+                                    {{form.switch_img}}
+                                    {% if form.switch_img.errors %}
+                                    <small class="help-block-none">{{form.switch_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Port</label>
+                                <div class="col-sm-9">
+                                    {{form.port_media_type}}
+                                    {% if form.port_media_type.errors %}
+                                    <small class="help-block-none">{{form.port_media_type.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Fiber Core</label>
+                                <div class="col-sm-9">
+                                    {{form.fiber_core}}
+                                    {% if form.fiber_core.errors %}
+                                    <small class="help-block-none">{{form.fiber_core.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">POP Name</label>
+                                <div class="col-sm-9">
+                                    {{form.pop_name}}
+                                    {% if form.pop_name.errors %}
+                                    <small class="help-block-none">{{form.pop_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC Engineer</label>
+                                <div class="col-sm-9">
+                                    {% if not etlfobj.assign_status %}
+                                    {{form.assign_noc}}
+                                    {% if form.assign_noc.errors %}
+                                    <small class="help-block-none">{{form.assign_noc.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    {{etlfobj.assign_noc}}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not etlfobj.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.ill_sign_id}} - {{etlfobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            {{form.ill_sign_time}}
+                            <div class="line"></div>
+                            <input type="hidden" name="prevurl" value="{{ request.META.HTTP_REFERER }}">
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else%}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.conn_code}}
+        
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Media Image</label>
+                                <div class="col-sm-9">
+                                    <a href="{{etlfobj.media_img.url}}" target="_blank">View</a>
+                                    
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Switch Image</label>
+                                <div class="col-sm-9">
+                                    <a href="{{etlfobj.switch_img.url}}" target="_blank">View</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Port</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.get_port_media_type_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Fiber Core</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.get_fiber_core_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">POP Name</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.pop_name}}
+                                </div>
+                            </div>
+
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC Engineer</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.assign_noc}}
+                                </div>
+                            </div>
+
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if etlfobj.assign_status %}
+                                            Assigned
+                                            {% else %}
+                                            not Assigned
+                                            {% endif %}</td>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{etlfobj.ill_sign_id}} - {{etlfobj.ill_sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

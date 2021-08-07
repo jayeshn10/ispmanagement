@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">{%if editper %}Edit{% else%} view{%endif%} Operator</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ request.META.HTTP_REFERER }}">Operators</a></li>
+        <li class="breadcrumb-item">Fiber Details</a></li>
+        <li class="breadcrumb-item active">{%if editper %}Edit{% else%} view{%endif%}</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">{%if editper %}Edit{% else%} view{%endif%} Operator Fiber Details</h3>
+                    </div>
+                    <div class="card-body">
+                        {%if editper %}
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator ID</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.operator_id}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Date and Time</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Core Details</label>
+                                <div class="col-sm-9">
+                                    {{form.core_details}}
+                                    {% if form.core_details.errors %}
+                                    <small class="help-block-none">{{form.core_details.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Core Color</label>
+                                <div class="col-sm-9">
+                                    {{form.core_color}}
+                                    {% if form.core_color.errors %}
+                                    <small class="help-block-none">{{form.core_color.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Switch Image</label>
+                                <div class="col-sm-9">
+                                    {{form.op_switch_img}}
+                                    {% if form.op_switch_img.errors %}
+                                    <small class="help-block-none">{{form.op_switch_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">POP Name</label>
+                                <div class="col-sm-9">
+                                    {{form.pop_name}}
+                                    {% if form.pop_name.errors %}
+                                    <small class="help-block-none">{{form.pop_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC</label>
+                                <div class="col-sm-9">
+                                    {% if not objfiber.assign_status%}
+                                    {{form.assign_noc}}
+                                    {% if form.assign_noc.errors %}
+                                    <small class="help-block-none">{{form.assign_noc.errors}}</small>
+                                    {% endif%}
+                                    {%else%}
+                                    {{objfiber.assign_noc}}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {% if not objfiber.assign_status %}
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                    {% else %}
+                                    <input type="checkbox" checked disabled class="checkbox-template">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.sign_id}} - {{objfiber.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                        {%else%}
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Operator ID</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.operator_id}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Date and Time</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Core Details</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.core_details}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Core Color</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.core_color}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">op_switch_img</label>
+                                <div class="col-sm-9">
+                                    <a href="{{objfiber.op_switch_img.url}}" target="_blank">view</a>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">POP Name</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.pop_name}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign NOC</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.assign_noc}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.get_assign_status_display}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Sign Verification</label>
+                                <div class="col-sm-9">
+                                    {{objfiber.sign_id}} - {{objfiber.sign_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Cancel</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

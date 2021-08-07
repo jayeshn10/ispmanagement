@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load static %}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+</script>
+{%endblock%}
+{%block blockstyle%}
+<style>
+    
+</style>
+{%endblock%}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">View Users</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">View Users</li>
+    </ul>
+</div>
+<div class="leftrightscroll">
+    <button id="left-button">&#8249;</button>
+    <button id="right-button">&#8250;</button>
+</div>
+<!--All Users-->
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="icon icon-search"></div>
+                            <input type="text" class="form-control" placeholder="search here" name="searchqry">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="num_page" value="{{rowcount}}">
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Go!" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="h4">All Users</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <form class="" method="GET">
+                                        <div class="form-group form-gr-margin">
+                                            {% for choice in filterform.form.groups %}
+                                            <label class="checkbox-inline">
+                                                {{ choice.tag }} &nbsp;&nbsp;{{ choice.choice_label }}
+                                            </label>
+                                            {% endfor %}
+                                            <!--  {{filterform.form.groups}}-->
+                                        </div>
+                                        <div class="form-inline">
+                                            <div class="form-group form-gr-margin"><input type="submit" class="btn btn-primary" value="Filter"></div>
+                                            <div class="form-group form-gr-margin"><a href="?" class="btn btn-primary">Clear</a></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                {% if user_data.has_other_pages %}
+                                <div class="pagination">
+                                    {% if user_data.has_previous %}
+                                    <a href="{% relative_url user_data.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in user_data.paginator.page_range %}
+                                    {% if user_data.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if user_data.number|add:"-1" == i or user_data.number|add:"-2" == i or user_data.number|add:1 == i or user_data.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if user_data.has_next %}
+                                    <a href="{% relative_url user_data.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4 pagination-itemsperp">
+                                <form name="myFormItemsPerPage" method="get">
+                                    <label><span class="sipe">Show</span><span class="sipe"><select id="num_page" name="num_page" class="form-control num_page">
+                                                {% for x, y in itemperform.fields.num_page.choices %}
+                                                <option value="{{ x }}" {% if rowcount == x %} selected{% endif %}>{{ y }}</option>
+                                                {% endfor %}
+                                            </select></span><span class="sipe">entries</span></label>
+                                    {% if itemperform.num_page.errors %}
+                                    <small class="help-block-none">{{itemperform.num_page.errors}}</small>
+                                    {% endif%}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No.</th>
+                                        <th>Image</th>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile Number</th>
+                                        <th>Job Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in user_data %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>
+                                            <img src="{{user.user_image.url}}" alt="..." width="50px" height="50px" style="padding: 3px; border: 1px solid #28a745; 
+                                            border-radius: 50% !important;">
+                                        </td>
+                                        <td><a href="{% url 'user_profile' user.id %}">{{user.username}}</a></td>
+                                        <td>{{user.user_full_name}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td>{{user.user_mobile}}</td>
+                                        <td>{%for a in user.groups.all %}{{ a.name}}<br>{%endfor%}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-8">
+                                {% if user_data.has_other_pages %}
+                                <div class="pagination">
+                                    {% if user_data.has_previous %}
+                                    <a href="{% relative_url user_data.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in user_data.paginator.page_range %}
+                                    {% if user_data.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if user_data.number|add:"-1" == i or user_data.number|add:"-2" == i or user_data.number|add:1 == i or user_data.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if user_data.has_next %}
+                                    <a href="{% relative_url user_data.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-4">
+                                <form method="POST" style="float: right;">
+                                        {%csrf_token%}
+                                        <input type="hidden" name="exportexcel" value="exportexcel">
+                                        <input type="submit" class="btn btn-secondary" value="Export Excel">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

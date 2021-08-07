@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% block maincontent %}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Add VTT ILL Sales Details</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'vttillconnections'%}">VendorThroughThreesaILLConnections</a></li>
+        <li class="breadcrumb-item">VTT ILL Connection Sales Details</li>
+        <li class="breadcrumb-item active">Add</li>
+    </ul>
+</div>
+<!--Create User Form-->
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Add  VTT ILL Connection Sales Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            {{form.errors}}
+                            
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Connection Id</label>
+                                <div class="col-sm-9">
+                                    {{objsn.conn_code}}
+                                    {{form.conn_code}}
+                                    {% if form.conn_code.errors %}
+                                    <small class="help-block-none">{{form.conn_code.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assigned Date and time</label>
+                                <div class="col-sm-9">
+                                    {{objsn.assign_date_time}}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Location Pin</label>
+                                <div class="col-sm-9">
+                                    {{form.location_pin}}
+                                    {% if form.location_pin.errors %}
+                                    <small class="help-block-none">{{form.location_pin.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order No</label>
+                                <div class="col-sm-9">
+                                    {{form.purchase_order_no}}
+                                    {% if form.purchase_order_no.errors %}
+                                    <small class="help-block-none">{{form.purchase_order_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Purchase Order Image</label>
+                                <div class="col-sm-9">
+                                    {{form.po_img}}
+                                    {% if form.po_img.errors %}
+                                    <small class="help-block-none">{{form.po_img.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">KYC Details</label>
+                                <div class="col-sm-9">
+                                    {{form.kyc_details}}
+                                    {% if form.kyc_details.errors %}
+                                    <small class="help-block-none">{{form.kyc_details.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">GST No.</label>
+                                <div class="col-sm-9">
+                                    {{form.gst_no}}
+                                    {% if form.gst_no.errors %}
+                                    <small class="help-block-none">{{form.gst_no.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Name</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_name}}
+                                    {% if form.cust_cpn_name.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_name.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Customer Contact Person Number</label>
+                                <div class="col-sm-9">
+                                    {{form.cust_cpn_num}}
+                                    {% if form.cust_cpn_num.errors %}
+                                    <small class="help-block-none">{{form.cust_cpn_num.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Fiber Engineer</label>
+                                <div class="col-sm-9">
+                                    {{form.assign_fiber_engg}}
+                                    {% if form.assign_fiber_engg.errors %}
+                                    <small class="help-block-none">{{form.assign_fiber_engg.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Assign Status</label>
+                                <div class="col-sm-9">
+                                    {{form.assign_status}}
+                                    {% if form.assign_status.errors %}
+                                    <small class="help-block-none">{{form.assign_status.errors}}</small>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 offset-sm-3">
+                                    <a href="{% url 'vttillconnections' %}" class="btn btn-secondary">Cancel</a>
+                                    <input type="submit" name="submit" value="save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent %}

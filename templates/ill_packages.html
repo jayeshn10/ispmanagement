@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% load static%}
+{% load user_tags %}
+{%block blockjs%}
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $('#allcb').change(function() {
+        if ($(this).prop('checked')) {
+            $('tbody tr td input[type="checkbox"]').each(function() {
+
+                $(this).prop('checked', true);
+                var id = $(this).attr("id");
+                valhtml = $("label[for=" + id + "]").html();
+                $("#mhtml" + id + "").html(valhtml);
+            });
+        } else {
+            $('tbody tr td input[type="checkbox"]').each(function() {
+                $(this).prop('checked', false);
+                var id = $(this).attr("id");
+                $("#mhtml" + id + "").html("");
+            });
+        }
+    });
+
+
+    $('input[type="checkbox"]').click(function() {
+        var id2 = $(this).attr("id");
+        valhtml = $("label[for=" + id2 + "]").html();
+
+        if ($(this).is(":checked")) {
+            $("#mhtml" + id2 + "").html(valhtml);
+        } else {
+            $("#mhtml" + id2 + "").html("");
+        }
+    });
+});
+</script>
+{% endblock%}
+{% block maincontent %}
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Threesa IIL Packages</h2>
+    </div>
+</header>
+<!-- Breadcrumb-->
+<div class="breadcrumb-holder container-fluid">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index'%}">Home</a></li>
+        <li class="breadcrumb-item active">Threesa IIL Packages</li>
+    </ul>
+</div>
+<section class="tables">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="icon icon-search"></div>
+                            <input type="text" class="form-control" placeholder="search here" name="searchqry">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="num_page" value="{{rowcount}}">
+                            <div class="input-group-append">
+                                <input type="submit" class="btn btn-primary" value="Go!" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="h4">Threesa IIL Packages</h3>
+                                </div>
+                                {% if request.user.is_staff or request.user|has_group:"renewalteam" %}
+                                <div class="col">
+                                    <a type="button" id="closeCard3" class="btn btn-primary" href="{% url 'addillpackages' %}" style="float: right;">ADD</a>
+                                </div>
+                                {%endif%}
+                            </div>
+                            <div class="row">
+                                <form class="form-inline" method="GET">
+                                    <div class="form-group form-gr-margin">{{filterform.form.pkg_name}}</div>
+        
+                                    <div class="form-group form-gr-margin">
+                                        {{filterform.form.pkg_bandwidth}}
+                                    </div>
+                                    <div class="form-group form-gr-margin">
+                                        {{filterform.form.pkg_noofdays}}
+                                    </div>
+
+                                    <div class="form-group form-gr-margin"><input type="submit" class="btn btn-primary" value="Filter"></div>
+                                    <div class="form-group form-gr-margin"><a href="?" class="btn btn-primary">Clear</a></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                {% if illpkgobjall.has_other_pages %}
+                                <div class="pagination">
+                                    {% if illpkgobjall.has_previous %}
+                                    <a href="{% relative_url illpkgobjall.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in illpkgobjall.paginator.page_range %}
+                                    {% if illpkgobjall.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if illpkgobjall.number|add:"-1" == i or illpkgobjall.number|add:"-2" == i or illpkgobjall.number|add:1 == i or illpkgobjall.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if illpkgobjall.has_next %}
+                                    <a href="{% relative_url illpkgobjall.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col pagination-itemsperp">
+                                <form name="myFormItemsPerPage" method="get">
+                                    <label><span class="sipe">Show</span><span class="sipe"><select id="num_page" name="num_page" class="form-control num_page">
+                                                {% for x, y in itemperform.fields.num_page.choices %}
+                                                <option value="{{ x }}" {% if rowcount == x %} selected{% endif %}>{{ y }}</option>
+                                                {% endfor %}
+                                            </select></span><span class="sipe">entries</span></label>
+                                    {% if itemperform.num_page.errors %}
+                                    <small class="help-block-none">{{itemperform.num_page.errors}}</small>
+                                    {% endif%}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                {% if request.user.is_staff or request.user|has_group:"renewalteam" %}
+                                {% if messages %}
+                                <div class="modal fade" id="DeletePkgModal" tabindex="-1" role="dialog" aria-labelledby="DeletePkgModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="DeletePkgModalLabel">ILL Package Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if messages %}
+                                                <ul class="messages">
+                                                    {% for message in messages %}
+                                                    <li class="{{ message.tags }}">{{ message }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script type="application/javascript">
+                                $(document).ready(function() {
+                                    $('#DeletePkgModal').modal({ show: true });
+                                });
+                                </script>
+                                {% endif %}
+                                <form method="POST" id="delpkgform">
+                                    {%csrf_token%}
+                                    <div>
+                                        <button type="button" data-toggle="modal" data-target="#myModaldelpkg" class="btn btn-primary" style="margin-bottom: 10px; ">Delete Package</button>
+                                        <div id="myModaldelpkg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                                            <div role="document" class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 id="exampleModalLabel" class="modal-title">Delete Confirmation</h4>
+                                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <h3>Are you sure to delete ?</h3>
+                                                            {% for illpkgobj in illpkgobjall %}
+                                                            <div id="mhtmlcb{{illpkgobj.id}}"></div>
+                                                            {%endfor%}
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                                                        <input type="submit" name="submit" value="Delete Package" class="btn btn-primary">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                {%endif%}
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" value="" class="checkbox-template" id="allcb" name="allcb" /></th>
+                                        <th>Sr.No.</th>
+                                        <th>Package Name</th>
+                                        <th>Package Bandwidth</th>
+                                        <th>Package Validity</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for illpkgobj in illpkgobjall %}
+                                    <tr>
+                                        <td><input id="cb{{illpkgobj.id}}" name="cb[]" type="checkbox" value="{{illpkgobj.id}}" class="checkbox-template" form="delpkgform">
+                                            <label style="display:none;" for="cb{{illpkgobj.id}}"> {{illpkgobj.pkg_name}}</label>
+                                        </td>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td><a href="{%url 'editillpackages' illpkgobj.id %}">{{illpkgobj.pkg_name}}</a></td>
+                                        <td>{{illpkgobj.pkg_bandwidth}}</td>
+                                        <td>{{illpkgobj.pkg_noofdays}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                {% if illpkgobjall.has_other_pages %}
+                                <div class="pagination">
+                                    {% if illpkgobjall.has_previous %}
+                                    <a href="{% relative_url illpkgobjall.previous_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&laquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&laquo;</span></a>
+                                    {% endif %}
+                                    {% for i in illpkgobjall.paginator.page_range %}
+                                    {% if illpkgobjall.number == i %}
+                                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                                    {% else %}
+                                    {%if illpkgobjall.number|add:"-1" == i or illpkgobjall.number|add:"-2" == i or illpkgobjall.number|add:1 == i or illpkgobjall.number|add:2 == i or forloop.first or forloop.last %}
+                                    <a href="{% relative_url i 'page' rowcount 'num_page' request.GET.urlencode %}">{% if forloop.first %}First{%elif forloop.last%}Last{%else%}{{ i }}{%endif%}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if illpkgobjall.has_next %}
+                                    <a href="{% relative_url illpkgobjall.next_page_number 'page' rowcount 'num_page' request.GET.urlencode %}">&raquo;</a>
+                                    {% else %}
+                                    <a class="disabled"><span>&raquo;</span></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock maincontent%}
